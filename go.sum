@@ -1,0 +1,4 @@
+github.com/google/go-cmp v0.5.9 h1:O2Tfq5qg4qc4AmwVlvv0oLiVAGB7enBSJ2x2DqQFi38=
+github.com/google/go-cmp v0.5.9/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
+github.com/ngicks/option v0.0.2 h1:+r4vxPgQvGmGFitqYoEPty33kBjVm3OHZTfVpyS5rhU=
+github.com/ngicks/option v0.0.2/go.mod h1:2uuBgv65I1X6ods8SLM71TQ1L4hk4QZnyVxsL7Rp1lk=
