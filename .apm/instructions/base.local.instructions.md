@@ -19,7 +19,7 @@ List of prefixres:
 
 #### Code convention
 
-We might keep using desugared implementation rather than range-seq, in filters, according to:
+We might keep using desugared implementation rather than range-seq in filters, according to:
 
 https://go-review.googlesource.com/c/go/+/745440
 
@@ -32,8 +32,12 @@ https://go-review.googlesource.com/c/go/+/745440
 > // checks: the user's range loop (the ultimate consumer) will keep
 > // the underlying iterator 'seq' (the ultimate producer) honest.
 
-Sources may be ultimate producers.  
-Reducers are ultimate consumers.
+Keep sugared range-over-func where:
+
+- sources
+- reducers
+
+because they are "ultimate producer/consumer".
 
 #### Testing
 
