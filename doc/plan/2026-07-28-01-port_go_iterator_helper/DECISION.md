@@ -36,8 +36,33 @@ merge and ReduceGroup but MergeSort").
 `(opt.Option[V], int)` with -1 sentinel (half-option), dropping the index
 (loses information callers may want).
 
-### D6. Test layout: per category (resolved 2026-07-28)
+### D6. Test layout: per implementation file (superseded 2026-07-28)
 
-`source_test.go`, `filter_test.go`, `reducer_test.go` at repo root. Rejected:
-one test file per ported file — testhelper suites make entries short enough
-that per-file tests would be mostly boilerplate.
+The original per-category decision was superseded during implementation.
+Tests live beside their corresponding implementation as `source-*_test.go`,
+`filter-*_test.go`, and `reducer-*_test.go`. Small shared test helpers may use
+an explicitly named helper test file.
+
+### D7. Go 1.27 generic fluent methods (resolved 2026-07-28)
+
+Add `Seq` / `Seq2` method counterparts for filters and reducers wherever the
+receiver constraints can faithfully express the operation. Methods may declare
+their own type parameters because the module targets Go 1.27rc1; no
+`GOEXPERIMENT` guard is used. Operations that require strengthening an existing
+receiver parameter (`comparable`, ordered, or a concrete `error` position)
+remain package functions.
+
+When returning a constructed `Seq[...]` causes a compiler method-set
+instantiation cycle, the fluent method returns the corresponding `iter.Seq`
+instead.
+
+### D8. Zip representation and constraints (resolved 2026-07-28)
+
+`Zip` and `Zip2` yield `tuple.Tuple2` whose fields are `opt.Option` values,
+rather than defining a package-specific zipped pair type. Their inputs use
+loose `~func(yield ...)` constraints so named sequence types are accepted.
+The package functions return `iter.Seq` because their yielded tuple shape
+differs from both inputs and therefore cannot safely preserve either input's
+named type. The fluent methods return `Seq[Z]`, using an inferred exact result
+type parameter `Z` to avoid recursive method-set instantiation while retaining
+the fluent wrapper.

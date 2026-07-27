@@ -51,6 +51,9 @@ layout and verified with `internal/testhelper`.
 - Generic signatures follow the existing loose style where useful:
   `Seq ~func(yield func(V) bool)` type params (as in `basic-kv.go`), so named
   seq types are accepted without conversion.
+- Go 1.27 generic methods provide `Seq` / `Seq2` counterparts where receiver
+  constraints can express the operation. Methods that construct a recursively
+  nested `Seq` method set may return `iter.Seq` instead.
 
 ## Port inventory (final selection, D4)
 
@@ -129,16 +132,17 @@ Legend: **[P]** port, **[–]** skip (reason noted).
 ## Implementation steps
 
 Each step compiles and passes tests independently; files as in the inventory.
-Tests are laid out per category (D6): `source_test.go`, `filter_test.go`,
-`reducer_test.go` at repo root.
+Tests are laid out per implementation file (D6, superseded): for example,
+`source-range_test.go`, `filter-limit_test.go`, and `reducer-find_test.go`.
 
 1. **Sources**: `source-empty.go`, `source-once.go`, `source-range.go`,
-   `source-repeat.go`, `source-chan.go`, `source-maps.go`; `source_test.go`
+   `source-repeat.go`, `source-chan.go`, `source-maps.go`; matching
+   `source-*_test.go` files
    via `TestSourceStateless`(2) / `TestSourceStateful`(2) (`Chan` is stateful;
    `Maps*` iteration order — sorted variants are deterministic, `MapsKeys` /
    `MapsOverlay` need order-insensitive comparison via `cmpOpt`).
 2. **Core filters**: `filter-concat.go`, `filter-map.go`, `filter-filter.go`,
-   `filter-limit.go`, `filter-skip.go`; `filter_test.go` via
+   `filter-limit.go`, `filter-skip.go`; matching `filter-*_test.go` files via
    `TestFilterStateless`/`Stateful` (+`2`, `2To1`, `1To2`).
 3. **Shape filters**: `filter-flatten.go`, `filter-translate.go`,
    `filter-tap.go`, `filter-compact.go`, `filter-unique.go`,
@@ -150,14 +154,18 @@ Tests are laid out per category (D6): `source_test.go`, `filter_test.go`,
 4. **Reducers**: `reducer-reduce.go`, `reducer-sum.go`, `reducer-min-max.go`,
    `reducer-first-last.go`, `reducer-nth.go`, `reducer-find.go`,
    `reducer-contains.go`, `reducer-every-any.go`, `reducer-for-each.go`,
-   `reducer-try.go`, `reducer-equal.go`, `reducer-reduce-group.go`;
-   `reducer_test.go` via `TestReducer`(2).
+   `reducer-try.go`, `reducer-equal.go`, `reducer-reduce-group.go`; matching
+   `reducer-*_test.go` files via `TestReducer`(2).
 5. **testhelper expansion if needed**: e.g. a helper asserting a reducer
    short-circuits (stops consuming after decision) for `First`/`Find`/`Any`;
    an infinite-source guard for `Cycle`.
 6. **Examples/docs**: port upstream example tests for ported symbols only,
    adapted to option returns (`example_*_test.go` at root). Update `doc.go`
    package doc with a category overview.
+7. **Fluent methods**: add Go 1.27 generic `Seq` / `Seq2` method counterparts
+   for filters and reducers wherever receiver constraints permit them. Keep
+   package functions for operations that need stronger receiver constraints
+   or specialized sequence shapes.
 
 ## Testing and verification
 
