@@ -8,6 +8,8 @@ import (
 
 	goCmp "github.com/google/go-cmp/cmp"
 	"github.com/ngicks/opiter"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func testReducerOne[V, R any](
@@ -20,9 +22,7 @@ func testReducerOne[V, R any](
 	t.Helper()
 
 	got := reduce(input)
-	if d := goCmp.Diff(expected, got, cmpOpt...); d != "" {
-		t.Errorf("(-want +got):\n%s", d)
-	}
+	assert.Check(t, is.DeepEqual(expected, got, cmpOpt...))
 
 	// Doing same test again: "no use after break" rule.
 	invocations := 0
@@ -34,9 +34,7 @@ func testReducerOne[V, R any](
 		}
 		oneShot(yield)
 	})
-	if d := goCmp.Diff(expected, got, cmpOpt...); d != "" {
-		t.Errorf("one-shot input: (-want +got):\n%s", d)
-	}
+	assert.Check(t, is.DeepEqual(expected, got, cmpOpt...), "one-shot input")
 }
 
 func testReducer2One[K, V, R any](
@@ -49,9 +47,7 @@ func testReducer2One[K, V, R any](
 	t.Helper()
 
 	got := reduce(input)
-	if d := goCmp.Diff(expected, got, cmpOpt...); d != "" {
-		t.Errorf("(-want +got):\n%s", d)
-	}
+	assert.Check(t, is.DeepEqual(expected, got, cmpOpt...))
 
 	// Doing same test again: "no use after break" rule.
 	invocations := 0
@@ -63,9 +59,7 @@ func testReducer2One[K, V, R any](
 		}
 		oneShot(yield)
 	})
-	if d := goCmp.Diff(expected, got, cmpOpt...); d != "" {
-		t.Errorf("one-shot input: (-want +got):\n%s", d)
-	}
+	assert.Check(t, is.DeepEqual(expected, got, cmpOpt...), "one-shot input")
 }
 
 func testReducer[V, R any](

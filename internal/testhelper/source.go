@@ -21,15 +21,11 @@ func testSourceStatelessOne[V any](
 	seq := source()
 	for _, phase := range []string{"first pass", "second pass"} {
 		got := slices.Collect(seq)
-		if d := diffValues(expected, got, cmpOpt); d != "" {
-			t.Errorf("%s: (-want +got):\n%s", phase, d)
-		}
+		assertValues(t, expected, got, cmpOpt, phase)
 	}
 
 	got := slices.Collect(source())
-	if d := diffValues(expected, got, cmpOpt); d != "" {
-		t.Errorf("fresh instance: (-want +got):\n%s", d)
-	}
+	assertValues(t, expected, got, cmpOpt, "fresh instance")
 
 	for cut := range len(expected) {
 		seq := source()
@@ -38,13 +34,9 @@ func testSourceStatelessOne[V any](
 			t.Errorf("break at %d: iterator ended before yielding element %d", cut, cut)
 			continue
 		}
-		if d := diffValues(expected[:cut+1], append(part, rej), cmpOpt); d != "" {
-			t.Errorf("break at %d: (-want +got):\n%s", cut, d)
-		}
+		assertValues(t, expected[:cut+1], append(part, rej), cmpOpt, "break at %d", cut)
 		got := slices.Collect(seq)
-		if d := diffValues(expected, got, cmpOpt); d != "" {
-			t.Errorf("re-invocation after break at %d: (-want +got):\n%s", cut, d)
-		}
+		assertValues(t, expected, got, cmpOpt, "re-invocation after break at %d", cut)
 	}
 }
 
@@ -58,9 +50,7 @@ func testSourceStatefulOne[V any](
 
 	seq := source()
 	got := slices.Collect(seq)
-	if d := diffValues(expected, got, cmpOpt); d != "" {
-		t.Errorf("full pass: (-want +got):\n%s", d)
-	}
+	assertValues(t, expected, got, cmpOpt, "full pass")
 	if again := slices.Collect(seq); len(again) != 0 {
 		t.Errorf("exhausted iterator yielded %d more value(s)", len(again))
 	}
@@ -72,13 +62,9 @@ func testSourceStatefulOne[V any](
 			t.Errorf("break at %d: iterator ended before yielding element %d", cut, cut)
 			continue
 		}
-		if d := diffValues(expected[:cut+1], append(part, rej), cmpOpt); d != "" {
-			t.Errorf("break at %d: (-want +got):\n%s", cut, d)
-		}
+		assertValues(t, expected[:cut+1], append(part, rej), cmpOpt, "break at %d", cut)
 		rest := slices.Collect(seq)
-		if d := diffValues(expected[cut+1:], rest, cmpOpt); d != "" {
-			t.Errorf("resume after break at %d: (-want +got):\n%s", cut, d)
-		}
+		assertValues(t, expected[cut+1:], rest, cmpOpt, "resume after break at %d", cut)
 	}
 }
 
@@ -93,15 +79,11 @@ func testSourceStateless2One[K, V any](
 	seq := source()
 	for _, phase := range []string{"first pass", "second pass"} {
 		got := opiter.Collect2(seq)
-		if d := diffValues(expected, got, cmpOpt); d != "" {
-			t.Errorf("%s: (-want +got):\n%s", phase, d)
-		}
+		assertValues(t, expected, got, cmpOpt, phase)
 	}
 
 	got := opiter.Collect2(source())
-	if d := diffValues(expected, got, cmpOpt); d != "" {
-		t.Errorf("fresh instance: (-want +got):\n%s", d)
-	}
+	assertValues(t, expected, got, cmpOpt, "fresh instance")
 
 	for cut := range len(expected) {
 		seq := source()
@@ -110,13 +92,9 @@ func testSourceStateless2One[K, V any](
 			t.Errorf("break at %d: iterator ended before yielding element %d", cut, cut)
 			continue
 		}
-		if d := diffValues(expected[:cut+1], append(part, rej), cmpOpt); d != "" {
-			t.Errorf("break at %d: (-want +got):\n%s", cut, d)
-		}
+		assertValues(t, expected[:cut+1], append(part, rej), cmpOpt, "break at %d", cut)
 		got := opiter.Collect2(seq)
-		if d := diffValues(expected, got, cmpOpt); d != "" {
-			t.Errorf("re-invocation after break at %d: (-want +got):\n%s", cut, d)
-		}
+		assertValues(t, expected, got, cmpOpt, "re-invocation after break at %d", cut)
 	}
 }
 
@@ -130,9 +108,7 @@ func testSourceStateful2One[K, V any](
 
 	seq := source()
 	got := opiter.Collect2(seq)
-	if d := diffValues(expected, got, cmpOpt); d != "" {
-		t.Errorf("full pass: (-want +got):\n%s", d)
-	}
+	assertValues(t, expected, got, cmpOpt, "full pass")
 	if again := opiter.Collect2(seq); len(again) != 0 {
 		t.Errorf("exhausted iterator yielded %d more pair(s)", len(again))
 	}
@@ -144,13 +120,9 @@ func testSourceStateful2One[K, V any](
 			t.Errorf("break at %d: iterator ended before yielding element %d", cut, cut)
 			continue
 		}
-		if d := diffValues(expected[:cut+1], append(part, rej), cmpOpt); d != "" {
-			t.Errorf("break at %d: (-want +got):\n%s", cut, d)
-		}
+		assertValues(t, expected[:cut+1], append(part, rej), cmpOpt, "break at %d", cut)
 		rest := opiter.Collect2(seq)
-		if d := diffValues(expected[cut+1:], rest, cmpOpt); d != "" {
-			t.Errorf("resume after break at %d: (-want +got):\n%s", cut, d)
-		}
+		assertValues(t, expected[cut+1:], rest, cmpOpt, "resume after break at %d", cut)
 	}
 }
 

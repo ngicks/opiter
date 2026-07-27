@@ -2,9 +2,12 @@ package testhelper
 
 import (
 	"iter"
+	"testing"
 
 	goCmp "github.com/google/go-cmp/cmp"
 	"github.com/ngicks/opiter"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 // takeN consumes n values from seq, then breaks. The value delivered to the
@@ -38,10 +41,11 @@ func takeN2[K, V any](seq iter.Seq2[K, V], n int) (got []opiter.KV[K, V], rej op
 	return
 }
 
-// diffValues compares slices treating nil and empty as equal at the top level.
-func diffValues[V any](expected, got []V, cmpOpt []goCmp.Option) string {
+// assertValues compares slices treating nil and empty as equal at the top level.
+func assertValues[V any](t *testing.T, expected, got []V, cmpOpt []goCmp.Option, msgAndArgs ...any) {
+	t.Helper()
 	if len(expected) == 0 && len(got) == 0 {
-		return ""
+		return
 	}
-	return goCmp.Diff(expected, got, cmpOpt...)
+	assert.Check(t, is.DeepEqual(expected, got, cmpOpt...), msgAndArgs...)
 }

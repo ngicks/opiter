@@ -9,6 +9,8 @@ import (
 
 	goCmp "github.com/google/go-cmp/cmp"
 	"github.com/ngicks/opiter"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestSourceHelpers(t *testing.T) {
@@ -140,36 +142,47 @@ type codedErr struct{ code int }
 
 func (e codedErr) Error() string { return fmt.Sprintf("code %d", e.code) }
 
+// notDeepEqual inverts [is.DeepEqual]; gotest.tools has no negative counterpart.
+func notDeepEqual(x, y any, opts ...goCmp.Option) is.Comparison {
+	return func() is.Result {
+		if is.DeepEqual(x, y, opts...)().Success() {
+			return is.ResultFailure(fmt.Sprintf("values are unexpectedly deep equal: %v, %v", x, y))
+		}
+		return is.ResultSuccess
+	}
+}
+
 func TestComparators(t *testing.T) {
 	wrapped := fmt.Errorf("wrap: %w", ErrSample1)
-	if !goCmp.Equal([]error{wrapped}, []error{ErrSample1}, CompareErrorsIs) {
-		t.Error("CompareErrorsIs: wrapped ErrSample1 should equal ErrSample1")
-	}
-	if goCmp.Equal([]error{ErrSample1}, []error{ErrSample2}, CompareErrorsIs) {
-		t.Error("CompareErrorsIs: ErrSample1 should not equal ErrSample2")
-	}
-	if !goCmp.Equal([]error{nil}, []error{nil}, CompareErrorsIs) {
-		t.Error("CompareErrorsIs: nil should equal nil")
-	}
-	if goCmp.Equal([]error{ErrSample1}, []error{nil}, CompareErrorsIs) {
-		t.Error("CompareErrorsIs: non-nil should not equal nil")
-	}
+	assert.DeepEqual(t, []error{wrapped}, []error{ErrSample1}, CompareErrorsIs)
+	assert.Assert(
+		t,
+		notDeepEqual([]error{ErrSample1}, []error{ErrSample2}, CompareErrorsIs),
+		"CompareErrorsIs: ErrSample1 should not equal ErrSample2",
+	)
+	assert.DeepEqual(t, []error{nil}, []error{nil}, CompareErrorsIs)
+	assert.Assert(
+		t,
+		notDeepEqual([]error{ErrSample1}, []error{nil}, CompareErrorsIs),
+		"CompareErrorsIs: non-nil should not equal nil",
+	)
 
-	if !goCmp.Equal(
+	assert.DeepEqual(
+		t,
 		[]error{fmt.Errorf("wrap: %w", codedErr{code: 1})},
 		[]error{codedErr{code: 2}},
 		CompareErrorsAs,
-	) {
-		t.Error("CompareErrorsAs: wrapped codedErr should equal codedErr regardless of field values")
-	}
-	if goCmp.Equal([]error{codedErr{code: 1}}, []error{ErrSample1}, CompareErrorsAs) {
-		t.Error("CompareErrorsAs: codedErr should not equal ErrSample1")
-	}
+	)
+	assert.Assert(
+		t,
+		notDeepEqual([]error{codedErr{code: 1}}, []error{ErrSample1}, CompareErrorsAs),
+		"CompareErrorsAs: codedErr should not equal ErrSample1",
+	)
 
-	if !goCmp.Equal(reflect.ValueOf(1), reflect.ValueOf(1), CompareReflectValue) {
-		t.Error("CompareReflectValue: 1 should equal 1")
-	}
-	if goCmp.Equal(reflect.ValueOf(1), reflect.ValueOf(2), CompareReflectValue) {
-		t.Error("CompareReflectValue: 1 should not equal 2")
-	}
+	assert.DeepEqual(t, reflect.ValueOf(1), reflect.ValueOf(1), CompareReflectValue)
+	assert.Assert(
+		t,
+		notDeepEqual(reflect.ValueOf(1), reflect.ValueOf(2), CompareReflectValue),
+		"CompareReflectValue: 1 should not equal 2",
+	)
 }
