@@ -48,10 +48,10 @@ func Unique2[Seq ~func(yield func(K, V) bool), K, V comparable](seq Seq) iter.Se
 	return UniqueFunc2(func(k K, v V) KV[K, V] { return PackKV(k, v) }, seq)
 }
 
-func (f Seq[V]) UniqueFunc[Id comparable](identifier func(V) Id) Seq[V] {
-	return Seq[V](UniqueFunc(identifier, f))
+func (seq Seq[V]) UniqueFunc[Id comparable](identifier func(V) Id) Seq[V] {
+	return Seq[V](UniqueFunc(identifier, seq))
 }
 
-func (f Seq2[K, V]) UniqueFunc[Id comparable](identifier func(K, V) Id) Seq2[K, V] {
-	return Seq2[K, V](UniqueFunc2(identifier, f))
+func (seq Seq2[K, V]) UniqueFunc[Id comparable](identifier func(K, V) Id) Seq2[K, V] {
+	return Seq2[K, V](UniqueFunc2(identifier, seq))
 }

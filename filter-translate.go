@@ -113,44 +113,44 @@ func Divide[Seq ~func(yield func(U) bool), K, V, U any](
 	}
 }
 
-func (f Seq[V]) Enumerate() Seq2[int, V] {
-	return Seq2[int, V](Enumerate(f))
+func (seq Seq[V]) Enumerate() Seq2[int, V] {
+	return Seq2[int, V](Enumerate(seq))
 }
 
-func (f Seq[V]) Pairs[U any](other iter.Seq[U]) Seq2[V, U] {
-	return Seq2[V, U](Pairs(f.Iter(), other))
+func (seq Seq[V]) Pairs[U any](other iter.Seq[U]) Seq2[V, U] {
+	return Seq2[V, U](Pairs(seq.Iter(), other))
 }
 
-func (f Seq[V]) Divide[K, U any](fn func(V) (K, U)) Seq2[K, U] {
-	return Seq2[K, U](Divide(fn, f))
+func (seq Seq[V]) Divide[K, U any](fn func(V) (K, U)) Seq2[K, U] {
+	return Seq2[K, U](Divide(fn, seq))
 }
 
-func (f Seq[V]) Omit() func(yield func() bool) {
-	return Omit(f)
+func (seq Seq[V]) Omit() func(yield func() bool) {
+	return Omit(seq)
 }
 
-func (f Seq2[K, V]) Pairs[K2, V2 any](
+func (seq Seq2[K, V]) Pairs[K2, V2 any](
 	other iter.Seq2[K2, V2],
 ) iter.Seq2[KV[K, V], KV[K2, V2]] {
-	return Pairs2(f.Iter2(), other)
+	return Pairs2(seq.Iter2(), other)
 }
 
-func (f Seq2[K, V]) Transpose() Seq2[V, K] {
-	return Seq2[V, K](Transpose(f))
+func (seq Seq2[K, V]) Transpose() Seq2[V, K] {
+	return Seq2[V, K](Transpose(seq))
 }
 
-func (f Seq2[K, V]) OmitF() Seq[V] {
-	return Seq[V](OmitF(f))
+func (seq Seq2[K, V]) OmitF() Seq[V] {
+	return Seq[V](OmitF(seq))
 }
 
-func (f Seq2[K, V]) OmitL() Seq[K] {
-	return Seq[K](OmitL(f))
+func (seq Seq2[K, V]) OmitL() Seq[K] {
+	return Seq[K](OmitL(seq))
 }
 
-func (f Seq2[K, V]) Unify[U any](fn func(K, V) U) Seq[U] {
-	return Seq[U](Unify(fn, f))
+func (seq Seq2[K, V]) Unify[U any](fn func(K, V) U) Seq[U] {
+	return Seq[U](Unify(fn, seq))
 }
 
-func (f Seq2[K, V]) Omit() func(yield func() bool) {
-	return Omit2(f)
+func (seq Seq2[K, V]) Omit() func(yield func() bool) {
+	return Omit2(seq)
 }

@@ -19,6 +19,6 @@ func RunningReduce[Seq ~func(yield func(V) bool), V, Sum any](
 	}
 }
 
-func (f Seq[V]) RunningReduce[Sum any](reducer func(Sum, V, int) Sum, initial Sum) Seq[Sum] {
-	return Seq[Sum](RunningReduce(reducer, initial, f))
+func (seq Seq[V]) RunningReduce[Sum any](reducer func(Sum, V, int) Sum, initial Sum) Seq[Sum] {
+	return Seq[Sum](RunningReduce(reducer, initial, seq))
 }

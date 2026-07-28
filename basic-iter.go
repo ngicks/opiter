@@ -19,12 +19,12 @@ func WrapSeq[V any, Iter ~func(yield func(V) bool)](seq Iter) Seq[V] {
 	return Seq[V](seq)
 }
 
-func (f Seq[V]) Iter() iter.Seq[V] {
-	return iter.Seq[V](f)
+func (seq Seq[V]) Iter() iter.Seq[V] {
+	return iter.Seq[V](seq)
 }
 
-func (f Seq[V]) IntoIter() iter.Seq[V] {
-	return iter.Seq[V](f)
+func (seq Seq[V]) IntoIter() iter.Seq[V] {
+	return iter.Seq[V](seq)
 }
 
 // Seq2 wraps iter.Seq2[K, V] to add generic function on it.
@@ -37,10 +37,10 @@ func WrapSeq2[K, V any, Iter ~func(yield func(K, V) bool)](seq Iter) Seq2[K, V] 
 	return Seq2[K, V](seq)
 }
 
-func (f Seq2[K, V]) Iter2() iter.Seq2[K, V] {
-	return iter.Seq2[K, V](f)
+func (seq Seq2[K, V]) Iter2() iter.Seq2[K, V] {
+	return iter.Seq2[K, V](seq)
 }
 
-func (f Seq2[K, V]) IntoIter2() iter.Seq2[K, V] {
-	return iter.Seq2[K, V](f)
+func (seq Seq2[K, V]) IntoIter2() iter.Seq2[K, V] {
+	return iter.Seq2[K, V](seq)
 }

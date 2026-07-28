@@ -84,7 +84,7 @@ func Zip2[
 	}
 }
 
-func (f Seq[V]) Zip[
+func (seq Seq[V]) Zip[
 	Other ~func(yield func(U) bool),
 	Z tuple.Tuple2[opt.Option[V], opt.Option[U]],
 	U any,
@@ -92,13 +92,13 @@ func (f Seq[V]) Zip[
 	other Other,
 ) Seq[Z] {
 	return func(yield func(Z) bool) {
-		Zip(f.Iter(), other)(func(z tuple.Tuple2[opt.Option[V], opt.Option[U]]) bool {
+		Zip(seq.Iter(), other)(func(z tuple.Tuple2[opt.Option[V], opt.Option[U]]) bool {
 			return yield(Z(z))
 		})
 	}
 }
 
-func (f Seq2[K, V]) Zip[
+func (seq Seq2[K, V]) Zip[
 	Other ~func(yield func(K2, V2) bool),
 	Z tuple.Tuple2[opt.Option[KV[K, V]], opt.Option[KV[K2, V2]]],
 	K2, V2 any,
@@ -106,7 +106,7 @@ func (f Seq2[K, V]) Zip[
 	other Other,
 ) Seq[Z] {
 	return func(yield func(Z) bool) {
-		Zip2(f.Iter2(), other)(func(
+		Zip2(seq.Iter2(), other)(func(
 			z tuple.Tuple2[opt.Option[KV[K, V]], opt.Option[KV[K2, V2]]],
 		) bool {
 			return yield(Z(z))

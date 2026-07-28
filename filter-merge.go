@@ -84,10 +84,10 @@ func MergeFunc2[K, V any](
 	}
 }
 
-func (f Seq[V]) MergeFunc(order func(V, V) int, other iter.Seq[V]) Seq[V] {
-	return Seq[V](MergeFunc(order, f.Iter(), other))
+func (seq Seq[V]) MergeFunc(order func(V, V) int, other iter.Seq[V]) Seq[V] {
+	return Seq[V](MergeFunc(order, seq.Iter(), other))
 }
 
-func (f Seq2[K, V]) MergeFunc(order func(K, K) int, other iter.Seq2[K, V]) Seq2[K, V] {
-	return Seq2[K, V](MergeFunc2(order, f.Iter2(), other))
+func (seq Seq2[K, V]) MergeFunc(order func(K, K) int, other iter.Seq2[K, V]) Seq2[K, V] {
+	return Seq2[K, V](MergeFunc2(order, seq.Iter2(), other))
 }

@@ -47,10 +47,10 @@ func CompactFunc2[Seq ~func(yield func(K, V) bool), K, V any](
 	}
 }
 
-func (f Seq[V]) CompactFunc(eq func(V, V) bool) Seq[V] {
-	return Seq[V](CompactFunc(eq, f))
+func (seq Seq[V]) CompactFunc(eq func(V, V) bool) Seq[V] {
+	return Seq[V](CompactFunc(eq, seq))
 }
 
-func (f Seq2[K, V]) CompactFunc(eq func(K, V, K, V) bool) Seq2[K, V] {
-	return Seq2[K, V](CompactFunc2(eq, f))
+func (seq Seq2[K, V]) CompactFunc(eq func(K, V, K, V) bool) Seq2[K, V] {
+	return Seq2[K, V](CompactFunc2(eq, seq))
 }

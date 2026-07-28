@@ -24,11 +24,11 @@ func Map2[Seq ~func(yield func(K1, V1) bool), K1, V1, K2, V2 any](
 }
 
 // Map returns an iterator over fn applied to f.
-func (f Seq[V]) Map[U any](fn func(V) U) Seq[U] {
-	return Seq[U](Map(fn, f))
+func (seq Seq[V]) Map[U any](fn func(V) U) Seq[U] {
+	return Seq[U](Map(fn, seq))
 }
 
-// Map returns an iterator over fn applied to f.
-func (f Seq2[K, V]) Map[K2, V2 any](fn func(K, V) (K2, V2)) Seq2[K2, V2] {
-	return Seq2[K2, V2](Map2(fn, f))
+// Map returns an iterator over fn applied to seq.
+func (seq Seq2[K, V]) Map[K2, V2 any](fn func(K, V) (K2, V2)) Seq2[K2, V2] {
+	return Seq2[K2, V2](Map2(fn, seq))
 }

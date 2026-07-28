@@ -94,18 +94,18 @@ func CycleBuffered2[Seq ~func(yield func(K, V) bool), K, V any](seq Seq) iter.Se
 	}
 }
 
-func (f Seq[V]) Cycle() Seq[V] {
-	return Seq[V](Cycle(f))
+func (seq Seq[V]) Cycle() Seq[V] {
+	return Seq[V](Cycle(seq))
 }
 
-func (f Seq[V]) CycleBuffered() Seq[V] {
-	return Seq[V](CycleBuffered(f))
+func (seq Seq[V]) CycleBuffered() Seq[V] {
+	return Seq[V](CycleBuffered(seq))
 }
 
-func (f Seq2[K, V]) Cycle() Seq2[K, V] {
-	return Seq2[K, V](Cycle2(f))
+func (seq Seq2[K, V]) Cycle() Seq2[K, V] {
+	return Seq2[K, V](Cycle2(seq))
 }
 
-func (f Seq2[K, V]) CycleBuffered() Seq2[K, V] {
-	return Seq2[K, V](CycleBuffered2(f))
+func (seq Seq2[K, V]) CycleBuffered() Seq2[K, V] {
+	return Seq2[K, V](CycleBuffered2(seq))
 }

@@ -56,18 +56,18 @@ func TapLast2[Seq ~func(yield func(K, V) bool), K, V any](
 	}
 }
 
-func (f Seq[V]) Tap(tap func(V)) Seq[V] {
-	return Seq[V](Tap(tap, f))
+func (seq Seq[V]) Tap(tap func(V)) Seq[V] {
+	return Seq[V](Tap(tap, seq))
 }
 
-func (f Seq[V]) TapLast(tap func()) Seq[V] {
-	return Seq[V](TapLast(tap, f))
+func (seq Seq[V]) TapLast(tap func()) Seq[V] {
+	return Seq[V](TapLast(tap, seq))
 }
 
-func (f Seq2[K, V]) Tap(tap func(K, V)) Seq2[K, V] {
-	return Seq2[K, V](Tap2(tap, f))
+func (seq Seq2[K, V]) Tap(tap func(K, V)) Seq2[K, V] {
+	return Seq2[K, V](Tap2(tap, seq))
 }
 
-func (f Seq2[K, V]) TapLast(tap func()) Seq2[K, V] {
-	return Seq2[K, V](TapLast2(tap, f))
+func (seq Seq2[K, V]) TapLast(tap func()) Seq2[K, V] {
+	return Seq2[K, V](TapLast2(tap, seq))
 }

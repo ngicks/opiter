@@ -92,26 +92,26 @@ func LimitAfter2[Seq ~func(yield func(K, V) bool), K, V any](
 	}
 }
 
-func (f Seq[V]) Limit(n int) Seq[V] {
-	return Seq[V](Limit(n, f))
+func (seq Seq[V]) Limit(n int) Seq[V] {
+	return Seq[V](Limit(n, seq))
 }
 
-func (f Seq[V]) LimitUntil(predicate func(V) bool) Seq[V] {
-	return Seq[V](LimitUntil(predicate, f))
+func (seq Seq[V]) LimitUntil(predicate func(V) bool) Seq[V] {
+	return Seq[V](LimitUntil(predicate, seq))
 }
 
-func (f Seq[V]) LimitAfter(predicate func(V) bool) Seq[V] {
-	return Seq[V](LimitAfter(predicate, f))
+func (seq Seq[V]) LimitAfter(predicate func(V) bool) Seq[V] {
+	return Seq[V](LimitAfter(predicate, seq))
 }
 
-func (f Seq2[K, V]) Limit(n int) Seq2[K, V] {
-	return Seq2[K, V](Limit2(n, f))
+func (seq Seq2[K, V]) Limit(n int) Seq2[K, V] {
+	return Seq2[K, V](Limit2(n, seq))
 }
 
-func (f Seq2[K, V]) LimitUntil(predicate func(K, V) bool) Seq2[K, V] {
-	return Seq2[K, V](LimitUntil2(predicate, f))
+func (seq Seq2[K, V]) LimitUntil(predicate func(K, V) bool) Seq2[K, V] {
+	return Seq2[K, V](LimitUntil2(predicate, seq))
 }
 
-func (f Seq2[K, V]) LimitAfter(predicate func(K, V) bool) Seq2[K, V] {
-	return Seq2[K, V](LimitAfter2(predicate, f))
+func (seq Seq2[K, V]) LimitAfter(predicate func(K, V) bool) Seq2[K, V] {
+	return Seq2[K, V](LimitAfter2(predicate, seq))
 }

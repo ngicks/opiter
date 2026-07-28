@@ -117,26 +117,26 @@ func SkipWhile2[Seq ~func(yield func(K, V) bool), K, V any](
 	}
 }
 
-func (f Seq[V]) Skip(n int) Seq[V] {
-	return Seq[V](Skip(n, f))
+func (seq Seq[V]) Skip(n int) Seq[V] {
+	return Seq[V](Skip(n, seq))
 }
 
-func (f Seq[V]) SkipLast(n int) Seq[V] {
-	return Seq[V](SkipLast(n, f))
+func (seq Seq[V]) SkipLast(n int) Seq[V] {
+	return Seq[V](SkipLast(n, seq))
 }
 
-func (f Seq[V]) SkipWhile(predicate func(V) bool) Seq[V] {
-	return Seq[V](SkipWhile(predicate, f))
+func (seq Seq[V]) SkipWhile(predicate func(V) bool) Seq[V] {
+	return Seq[V](SkipWhile(predicate, seq))
 }
 
-func (f Seq2[K, V]) Skip(n int) Seq2[K, V] {
-	return Seq2[K, V](Skip2(n, f))
+func (seq Seq2[K, V]) Skip(n int) Seq2[K, V] {
+	return Seq2[K, V](Skip2(n, seq))
 }
 
-func (f Seq2[K, V]) SkipLast(n int) Seq2[K, V] {
-	return Seq2[K, V](SkipLast2(n, f))
+func (seq Seq2[K, V]) SkipLast(n int) Seq2[K, V] {
+	return Seq2[K, V](SkipLast2(n, seq))
 }
 
-func (f Seq2[K, V]) SkipWhile(predicate func(K, V) bool) Seq2[K, V] {
-	return Seq2[K, V](SkipWhile2(predicate, f))
+func (seq Seq2[K, V]) SkipWhile(predicate func(K, V) bool) Seq2[K, V] {
+	return Seq2[K, V](SkipWhile2(predicate, seq))
 }

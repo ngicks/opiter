@@ -51,6 +51,6 @@ func sliceRing[S ~[]E, E any](s S, start int) iter.Seq[E] {
 	}
 }
 
-func (f Seq[V]) Window(n int) iter.Seq[iter.Seq[V]] {
-	return WindowSeq(n, f)
+func (seq Seq[V]) Window(n int) iter.Seq[iter.Seq[V]] {
+	return WindowSeq(n, seq)
 }

@@ -41,11 +41,11 @@ func Concat2[K, V any](seqs ...iter.Seq2[K, V]) iter.Seq2[K, V] {
 }
 
 // Concat returns an iterator over f followed by seqs.
-func (f Seq[V]) Concat(seqs ...iter.Seq[V]) Seq[V] {
-	return Seq[V](Concat(append([]iter.Seq[V]{f.Iter()}, seqs...)...))
+func (seq Seq[V]) Concat(seqs ...iter.Seq[V]) Seq[V] {
+	return Seq[V](Concat(append([]iter.Seq[V]{seq.Iter()}, seqs...)...))
 }
 
-// Concat returns an iterator over f followed by seqs.
-func (f Seq2[K, V]) Concat(seqs ...iter.Seq2[K, V]) Seq2[K, V] {
-	return Seq2[K, V](Concat2(append([]iter.Seq2[K, V]{f.Iter2()}, seqs...)...))
+// Concat returns an iterator over seq followed by seqs.
+func (seq Seq2[K, V]) Concat(seqs ...iter.Seq2[K, V]) Seq2[K, V] {
+	return Seq2[K, V](Concat2(append([]iter.Seq2[K, V]{seq.Iter2()}, seqs...)...))
 }

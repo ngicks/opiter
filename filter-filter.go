@@ -24,11 +24,11 @@ func Filter2[Seq ~func(yield func(K, V) bool), K, V any](
 }
 
 // Filter returns values from f for which predicate returns true.
-func (f Seq[V]) Filter(predicate func(V) bool) Seq[V] {
-	return Seq[V](Filter(predicate, f))
+func (seq Seq[V]) Filter(predicate func(V) bool) Seq[V] {
+	return Seq[V](Filter(predicate, seq))
 }
 
-// Filter returns pairs from f for which predicate returns true.
-func (f Seq2[K, V]) Filter(predicate func(K, V) bool) Seq2[K, V] {
-	return Seq2[K, V](Filter2(predicate, f))
+// Filter returns pairs from seq for which predicate returns true.
+func (seq Seq2[K, V]) Filter(predicate func(K, V) bool) Seq2[K, V] {
+	return Seq2[K, V](Filter2(predicate, seq))
 }
