@@ -8,10 +8,10 @@ dependencies:
   apm:
     - git: github.com/ngicks/agents-package
       path: apm-package/cc-workers
-#    - git: github.com/ngicks/agents-package
-#      path: hooks/go-golangci-lint
-#    - git: github.com/ngicks/agents-package
-#      path: hooks/go-vet-ngcheckers
+    - git: github.com/ngicks/agents-package
+      path: hooks/go-golangci-lint
+    - git: github.com/ngicks/agents-package
+      path: hooks/go-vet-ngcheckers
     - git: github.com/ngicks/agents-package
       path: instructions/ngicks.base.env.instructions.md
     - git: github.com/ngicks/agents-package

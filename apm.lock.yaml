@@ -1,11 +1,11 @@
 lockfile_version: '1'
-generated_at: '2026-08-17T20:11:37.172554+00:00'
+generated_at: '2026-08-20T00:42:34.654563+00:00'
 apm_version: 0.28.0
 dependencies:
 - repo_url: ngicks/agents-package
   name: cc-workers
   host: github.com
-  resolved_commit: 7c6edcd233c67ba077145b9d5cb4f8463175f198
+  resolved_commit: a85dbb1e2cb417b3a466e5f8846296438bfc88ca
   version: 0.0.1
   virtual_path: apm-package/cc-workers
   is_virtual: true
@@ -91,9 +91,27 @@ dependencies:
   content_hash: sha256:2f53a876c23c074cdd203ad0250ba8f32df3a6aa4ced986277f3739ad873ec5c
   declared_license: MIT
 - repo_url: ngicks/agents-package
+  name: go-golangci-lint
+  host: github.com
+  resolved_commit: a85dbb1e2cb417b3a466e5f8846296438bfc88ca
+  version: 1.0.0
+  virtual_path: hooks/go-golangci-lint
+  is_virtual: true
+  package_type: hook_package
+  content_hash: sha256:7d42e09d4e67dc9a0c2e87b49d0f21f42f3d368c4cfae9117b87d7915af9610a
+- repo_url: ngicks/agents-package
+  name: go-vet-ngcheckers
+  host: github.com
+  resolved_commit: a85dbb1e2cb417b3a466e5f8846296438bfc88ca
+  version: 1.0.0
+  virtual_path: hooks/go-vet-ngcheckers
+  is_virtual: true
+  package_type: hook_package
+  content_hash: sha256:55d6da41fbbabb28f30bf4e4831443fe6b37cb970babb0ae86fca508dc488557
+- repo_url: ngicks/agents-package
   name: agents-package-ngicks.base.env
   host: github.com
-  resolved_commit: 7c6edcd233c67ba077145b9d5cb4f8463175f198
+  resolved_commit: a85dbb1e2cb417b3a466e5f8846296438bfc88ca
   version: 1.0.0
   virtual_path: instructions/ngicks.base.env.instructions.md
   is_virtual: true
@@ -105,7 +123,7 @@ dependencies:
 - repo_url: ngicks/agents-package
   name: agents-package-ngicks.base.preference
   host: github.com
-  resolved_commit: 7c6edcd233c67ba077145b9d5cb4f8463175f198
+  resolved_commit: a85dbb1e2cb417b3a466e5f8846296438bfc88ca
   version: 1.0.0
   virtual_path: instructions/ngicks.base.preference.instructions.md
   is_virtual: true
@@ -117,7 +135,7 @@ dependencies:
 - repo_url: ngicks/agents-package
   name: agents-package-ngicks.go.basics
   host: github.com
-  resolved_commit: 7c6edcd233c67ba077145b9d5cb4f8463175f198
+  resolved_commit: a85dbb1e2cb417b3a466e5f8846296438bfc88ca
   version: 1.0.0
   virtual_path: instructions/ngicks.go.basics.instructions.md
   is_virtual: true
@@ -129,7 +147,7 @@ dependencies:
 - repo_url: ngicks/agents-package
   name: agents-package-ngicks.go.design-preference
   host: github.com
-  resolved_commit: 7c6edcd233c67ba077145b9d5cb4f8463175f198
+  resolved_commit: a85dbb1e2cb417b3a466e5f8846296438bfc88ca
   version: 1.0.0
   virtual_path: instructions/ngicks.go.design-preference.instructions.md
   is_virtual: true
@@ -141,7 +159,7 @@ dependencies:
 - repo_url: ngicks/agents-package
   name: go-check-outdated-patterns
   host: github.com
-  resolved_commit: 7c6edcd233c67ba077145b9d5cb4f8463175f198
+  resolved_commit: a85dbb1e2cb417b3a466e5f8846296438bfc88ca
   version: unknown
   virtual_path: skills/go-check-outdated-patterns
   is_virtual: true
@@ -158,7 +176,7 @@ dependencies:
 - repo_url: ngicks/agents-package
   name: go-review-checklist
   host: github.com
-  resolved_commit: 7c6edcd233c67ba077145b9d5cb4f8463175f198
+  resolved_commit: a85dbb1e2cb417b3a466e5f8846296438bfc88ca
   version: unknown
   virtual_path: skills/go-review-checklist
   is_virtual: true
@@ -175,7 +193,7 @@ dependencies:
 - repo_url: ngicks/agents-package
   name: ngcommit
   host: github.com
-  resolved_commit: 7c6edcd233c67ba077145b9d5cb4f8463175f198
+  resolved_commit: a85dbb1e2cb417b3a466e5f8846296438bfc88ca
   version: unknown
   virtual_path: skills/ngcommit
   is_virtual: true
@@ -192,7 +210,7 @@ dependencies:
 - repo_url: ngicks/agents-package
   name: ngplan
   host: github.com
-  resolved_commit: 7c6edcd233c67ba077145b9d5cb4f8463175f198
+  resolved_commit: a85dbb1e2cb417b3a466e5f8846296438bfc88ca
   version: unknown
   virtual_path: skills/ngplan
   is_virtual: true
