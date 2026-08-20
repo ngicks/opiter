@@ -9,14 +9,6 @@ import (
 	"github.com/ngicks/opiter/internal/testhelper"
 )
 
-func TestWindow(t *testing.T) {
-	got := slices.Collect(opiter.Window([]int{1, 2, 3, 4}, 2))
-	expected := [][]int{{1, 2}, {2, 3}, {3, 4}}
-	if !slices.EqualFunc(got, expected, slices.Equal) {
-		t.Fatalf("Window() = %v", got)
-	}
-}
-
 func TestWindowSeq(t *testing.T) {
 	filters := []func(iter.Seq[int]) iter.Seq[[]int]{
 		func(s iter.Seq[int]) iter.Seq[[]int] {

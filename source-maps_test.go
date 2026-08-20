@@ -3,7 +3,6 @@ package opiter_test
 import (
 	"cmp"
 	"iter"
-	"slices"
 	"testing"
 
 	goCmp "github.com/google/go-cmp/cmp"
@@ -11,23 +10,6 @@ import (
 	"github.com/ngicks/opiter"
 	"github.com/ngicks/opiter/internal/testhelper"
 )
-
-func TestMapsKeys(t *testing.T) {
-	m := map[string]int{"foo": 1, "bar": 2, "baz": 3}
-
-	testhelper.TestSourceStateless2(
-		t,
-		[]func() iter.Seq2[string, int]{func() iter.Seq2[string, int] {
-			return opiter.MapsKeys(m, slices.Values([]string{"baz", "missing", "foo"}))
-		}},
-		[]opiter.KV[string, int]{
-			{K: "baz", V: 3},
-			{K: "missing", V: 0},
-			{K: "foo", V: 1},
-		},
-		nil,
-	)
-}
 
 func TestMapsSorted(t *testing.T) {
 	m := map[string]int{"foo": 1, "bar": 2, "baz": 3}

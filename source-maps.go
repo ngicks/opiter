@@ -7,21 +7,6 @@ import (
 	"slices"
 )
 
-// MapsKeys returns an iterator over the values in m for each key yielded by
-// keys. The keys iterator determines the order.
-func MapsKeys[M ~map[K]V, Seq ~func(yield func(K) bool), K comparable, V any](
-	m M,
-	keys Seq,
-) iter.Seq2[K, V] {
-	return func(yield func(K, V) bool) {
-		for k := range keys {
-			if !yield(k, m[k]) {
-				return
-			}
-		}
-	}
-}
-
 // MapsSorted returns an iterator over m in ascending key order. It takes a
 // snapshot of the keys each time the iterator is invoked.
 func MapsSorted[M ~map[K]V, K cmp.Ordered, V any](m M) iter.Seq2[K, V] {
