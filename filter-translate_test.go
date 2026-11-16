@@ -30,11 +30,11 @@ func TestTranslateSeqShapes(t *testing.T) {
 	testhelper.TestFilterStateless1To2(t, slices.Values([]int{12, 34}),
 		[]func(iter.Seq[int]) iter.Seq2[int, int]{
 			func(s iter.Seq[int]) iter.Seq2[int, int] {
-				return opiter.Divide(func(v int) (int, int) { return v / 10, v % 10 }, s)
+				return opiter.Disassemble(func(v int) (int, int) { return v / 10, v % 10 }, s)
 			},
 			func(s iter.Seq[int]) iter.Seq2[int, int] {
 				return opiter.WrapSeq(s).
-					Divide(func(v int) (int, int) { return v / 10, v % 10 }).
+					Disassemble(func(v int) (int, int) { return v / 10, v % 10 }).
 					Iter2()
 			},
 		},
@@ -61,10 +61,10 @@ func TestTranslatePairShapes(t *testing.T) {
 		[]func(iter.Seq2[int, string]) iter.Seq[string]{
 			func(s iter.Seq2[int, string]) iter.Seq[string] { return opiter.OmitF(s) },
 			func(s iter.Seq2[int, string]) iter.Seq[string] {
-				return opiter.Unify(func(k int, v string) string { return v }, s)
+				return opiter.Assemble(func(k int, v string) string { return v }, s)
 			},
 			func(s iter.Seq2[int, string]) iter.Seq[string] {
-				return opiter.WrapSeq2(s).Unify(func(k int, v string) string { return v }).Iter()
+				return opiter.WrapSeq2(s).Assemble(func(k int, v string) string { return v }).Iter()
 			},
 		}, []string{"a", "b"}, nil)
 }

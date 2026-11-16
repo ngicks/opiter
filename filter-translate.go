@@ -89,8 +89,8 @@ func Omit2[Seq ~func(yield func(K, V) bool), K, V any](seq Seq) func(yield func(
 	}
 }
 
-// Unify maps each pair from seq to a single value.
-func Unify[Seq ~func(yield func(K, V) bool), K, V, U any](
+// Assemble maps each pair from seq to a single value.
+func Assemble[Seq ~func(yield func(K, V) bool), K, V, U any](
 	fn func(K, V) U,
 	seq Seq,
 ) iter.Seq[U] {
@@ -101,8 +101,8 @@ func Unify[Seq ~func(yield func(K, V) bool), K, V, U any](
 	}
 }
 
-// Divide maps each value from seq to a pair.
-func Divide[Seq ~func(yield func(U) bool), K, V, U any](
+// Disassemble maps each value from seq to a pair.
+func Disassemble[Seq ~func(yield func(U) bool), K, V, U any](
 	fn func(U) (K, V),
 	seq Seq,
 ) iter.Seq2[K, V] {
@@ -121,8 +121,8 @@ func (seq Seq[V]) Pairs[U any](other iter.Seq[U]) Seq2[V, U] {
 	return Seq2[V, U](Pairs(seq.Iter(), other))
 }
 
-func (seq Seq[V]) Divide[K, U any](fn func(V) (K, U)) Seq2[K, U] {
-	return Seq2[K, U](Divide(fn, seq))
+func (seq Seq[V]) Disassemble[K, U any](fn func(V) (K, U)) Seq2[K, U] {
+	return Seq2[K, U](Disassemble(fn, seq))
 }
 
 func (seq Seq[V]) Omit() func(yield func() bool) {
@@ -147,8 +147,8 @@ func (seq Seq2[K, V]) OmitL() Seq[K] {
 	return Seq[K](OmitL(seq))
 }
 
-func (seq Seq2[K, V]) Unify[U any](fn func(K, V) U) Seq[U] {
-	return Seq[U](Unify(fn, seq))
+func (seq Seq2[K, V]) Assemble[U any](fn func(K, V) U) Seq[U] {
+	return Seq[U](Assemble(fn, seq))
 }
 
 func (seq Seq2[K, V]) Omit() func(yield func() bool) {
