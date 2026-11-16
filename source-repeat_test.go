@@ -56,6 +56,24 @@ func TestRepeatInfiniteStops(t *testing.T) {
 	}
 
 	count = 0
+	opiter.Repeat2("a", 1, -1)(func(string, int) bool {
+		count++
+		return count < 5
+	})
+	if count != 5 {
+		t.Errorf("Repeat2 yielded %d pairs, want 5", count)
+	}
+
+	count = 0
+	opiter.RepeatFunc(func() int { return count }, -1)(func(int) bool {
+		count++
+		return count < 5
+	})
+	if count != 5 {
+		t.Errorf("RepeatFunc yielded %d values, want 5", count)
+	}
+
+	count = 0
 	opiter.RepeatFunc2(
 		func() int { return count },
 		func() int { return count },

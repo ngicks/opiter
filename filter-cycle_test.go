@@ -1,6 +1,7 @@
 package opiter_test
 
 import (
+	"iter"
 	"slices"
 	"testing"
 
@@ -46,4 +47,32 @@ func TestCycleVariants2(t *testing.T) {
 			t.Fatalf("seq[%d] = %v", i, got)
 		}
 	}
+}
+
+func TestCycleBufferedBreak(t *testing.T) {
+	n := len(testhelper.SampleValues) + 3
+	filters := []func(iter.Seq[int]) iter.Seq[int]{
+		func(s iter.Seq[int]) iter.Seq[int] { return opiter.Limit(n, opiter.CycleBuffered(s)) },
+	}
+	expected := append(slices.Clone(testhelper.SampleValues), testhelper.SampleValues[:3]...)
+	testhelper.TestFilterStateless(t, testhelper.SampleSeq(), filters, expected, nil)
+	testhelper.TestFilterStateless(t, slices.Values([]int{}), filters, nil, nil)
+}
+
+func TestCycleBuffered2Break(t *testing.T) {
+	n := len(testhelper.SamplePairs) + 3
+	filters := []func(iter.Seq2[string, int]) iter.Seq2[string, int]{
+		func(s iter.Seq2[string, int]) iter.Seq2[string, int] {
+			return opiter.Limit2(n, opiter.CycleBuffered2(s))
+		},
+	}
+	expected := append(slices.Clone(testhelper.SamplePairs), testhelper.SamplePairs[:3]...)
+	testhelper.TestFilterStateless2(t, testhelper.SampleSeq2(), filters, expected, nil)
+	testhelper.TestFilterStateless2(
+		t,
+		opiter.Values2[[]opiter.KV[string, int]](nil),
+		filters,
+		nil,
+		nil,
+	)
 }

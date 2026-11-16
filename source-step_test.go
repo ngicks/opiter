@@ -1,10 +1,12 @@
 package opiter_test
 
 import (
+	"iter"
 	"slices"
 	"testing"
 
 	"github.com/ngicks/opiter"
+	"github.com/ngicks/opiter/internal/testhelper"
 )
 
 func TestStep(t *testing.T) {
@@ -15,8 +17,21 @@ func TestStep(t *testing.T) {
 }
 
 func TestStepBy(t *testing.T) {
-	got := opiter.Collect2(opiter.StepBy(1, 2, []string{"a", "b", "c", "d"}))
-	if !slices.Equal(got, []opiter.KV[int, string]{{1, "b"}, {3, "d"}}) {
-		t.Fatalf("StepBy() = %v", got)
-	}
+	values := []string{"a", "b", "c", "d"}
+	testhelper.TestSourceStateless2(
+		t,
+		[]func() iter.Seq2[int, string]{
+			func() iter.Seq2[int, string] { return opiter.StepBy(1, 2, values) },
+		},
+		[]opiter.KV[int, string]{{K: 1, V: "b"}, {K: 3, V: "d"}},
+		nil,
+	)
+	testhelper.TestSourceStateless2(
+		t,
+		[]func() iter.Seq2[int, string]{
+			func() iter.Seq2[int, string] { return opiter.StepBy(-1, 2, values) },
+		},
+		nil,
+		nil,
+	)
 }

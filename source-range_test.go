@@ -42,6 +42,11 @@ func TestRange(t *testing.T) {
 			expected: []int{2, 1, 0, -1, -2},
 		},
 		{
+			name:     "exclusive descending",
+			source:   func() iter.Seq[int] { return opiter.RangeInclusive(2, -2, false, false) },
+			expected: []int{1, 0, -1},
+		},
+		{
 			name:     "equal included",
 			source:   func() iter.Seq[int] { return opiter.RangeInclusive(1, 1, true, true) },
 			expected: []int{1},

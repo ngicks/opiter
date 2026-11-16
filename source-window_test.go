@@ -1,16 +1,25 @@
 package opiter_test
 
 import (
-	"slices"
+	"iter"
 	"testing"
 
 	"github.com/ngicks/opiter"
+	"github.com/ngicks/opiter/internal/testhelper"
 )
 
 func TestWindow(t *testing.T) {
-	got := slices.Collect(opiter.Window([]int{1, 2, 3, 4}, 2))
-	expected := [][]int{{1, 2}, {2, 3}, {3, 4}}
-	if !slices.EqualFunc(got, expected, slices.Equal) {
-		t.Fatalf("Window() = %v", got)
-	}
+	values := []int{1, 2, 3, 4}
+	testhelper.TestSourceStateless(
+		t,
+		[]func() iter.Seq[[]int]{func() iter.Seq[[]int] { return opiter.Window(values, 2) }},
+		[][]int{{1, 2}, {2, 3}, {3, 4}},
+		nil,
+	)
+	testhelper.TestSourceStateless(
+		t,
+		[]func() iter.Seq[[]int]{func() iter.Seq[[]int] { return opiter.Window(values, 0) }},
+		nil,
+		nil,
+	)
 }

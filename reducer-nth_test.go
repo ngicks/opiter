@@ -35,6 +35,7 @@ func TestNth(t *testing.T) {
 	assert.Assert(t, opiter.Nth(-1, testhelper.SampleSeq()).IsNone())
 	assert.Assert(t, opiter.Nth(len(testhelper.SampleValues), testhelper.SampleSeq()).IsNone())
 	assert.Assert(t, opiter.Nth2(-1, testhelper.SampleSeq2()).IsNone())
+	assert.Assert(t, opiter.Nth2(len(testhelper.SamplePairs), testhelper.SampleSeq2()).IsNone())
 }
 
 func TestSeqNth(t *testing.T) {

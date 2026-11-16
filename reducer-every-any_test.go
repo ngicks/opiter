@@ -38,6 +38,14 @@ func TestEveryAny(t *testing.T) {
 	empty := slices.Values([]int{})
 	assert.Assert(t, opiter.Every(func(int) bool { return false }, empty))
 	assert.Assert(t, !opiter.Any(func(int) bool { return true }, empty))
+	assert.Assert(t, !opiter.Every2(
+		func(k string, _ int) bool { return k != "baz" },
+		testhelper.SampleSeq2(),
+	))
+	assert.Assert(t, !opiter.Any2(
+		func(k string, _ int) bool { return k == "nope" },
+		testhelper.SampleSeq2(),
+	))
 }
 
 func TestSeqEveryAny(t *testing.T) {

@@ -46,6 +46,13 @@ func TestEqual(t *testing.T) {
 	assert.Assert(t, !opiter.Equal(slices.Values([]int{1, 2}), slices.Values([]int{1, 2, 3})))
 	assert.Assert(t, !opiter.Equal(slices.Values([]int{1, 3}), slices.Values([]int{1, 2})))
 	assert.Assert(t, opiter.Equal(slices.Values([]int{}), slices.Values([]int{})))
+
+	pairs := func(kvs ...opiter.KV[string, int]) iter.Seq2[string, int] {
+		return opiter.Values2(kvs)
+	}
+	assert.Assert(t, !opiter.Equal2(pairs(opiter.PackKV("a", 1)), pairs()))
+	assert.Assert(t, !opiter.Equal2(pairs(opiter.PackKV("a", 1)), pairs(opiter.PackKV("a", 2))))
+	assert.Assert(t, !opiter.Equal2(pairs(), pairs(opiter.PackKV("a", 1))))
 }
 
 func TestSeqEqualFunc(t *testing.T) {

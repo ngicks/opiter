@@ -111,6 +111,8 @@ func TestSkipVariants2(t *testing.T) {
 func TestSkipVariantsStateful(t *testing.T) {
 	filters := []func(iter.Seq[int]) iter.Seq[int]{
 		func(s iter.Seq[int]) iter.Seq[int] { return opiter.Skip(0, s) },
+		func(s iter.Seq[int]) iter.Seq[int] { return opiter.SkipLast(0, s) },
+		func(s iter.Seq[int]) iter.Seq[int] { return opiter.WrapSeq(s).SkipLast(-1).Iter() },
 		func(s iter.Seq[int]) iter.Seq[int] {
 			return opiter.SkipWhile(func(int) bool { return false }, s)
 		},
@@ -125,6 +127,10 @@ func TestSkipVariantsStateful(t *testing.T) {
 func TestSkipVariants2Stateful(t *testing.T) {
 	filters := []func(iter.Seq2[string, int]) iter.Seq2[string, int]{
 		func(s iter.Seq2[string, int]) iter.Seq2[string, int] { return opiter.Skip2(0, s) },
+		func(s iter.Seq2[string, int]) iter.Seq2[string, int] { return opiter.SkipLast2(0, s) },
+		func(s iter.Seq2[string, int]) iter.Seq2[string, int] {
+			return opiter.WrapSeq2(s).SkipLast(-1).Iter2()
+		},
 		func(s iter.Seq2[string, int]) iter.Seq2[string, int] {
 			return opiter.SkipWhile2(func(string, int) bool { return false }, s)
 		},

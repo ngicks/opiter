@@ -75,6 +75,59 @@ func TestTryReducers(t *testing.T) {
 	assert.ErrorIs(t, err, errStop)
 }
 
+func TestTryReducersNoError(t *testing.T) {
+	input := opiter.Values2([]opiter.KV[int, error]{{K: 3}, {K: 1}, {K: 4}})
+	type findResult struct {
+		Value opt.Option[opiter.KV[int, int]]
+		Err   error
+	}
+	testhelper.TestReducer2(
+		t,
+		input,
+		[]func(iter.Seq2[int, error]) findResult{
+			func(seq iter.Seq2[int, error]) findResult {
+				value, err := opiter.TryFind(func(v int) bool { return v == 9 }, seq)
+				return findResult{Value: value, Err: err}
+			},
+		},
+		findResult{Value: opt.None[opiter.KV[int, int]]()},
+		[]goCmp.Option{compareOption[opiter.KV[int, int]](), testhelper.CompareErrorsIs},
+	)
+
+	type valuesResult struct {
+		Values []int
+		Err    error
+	}
+	testhelper.TestReducer2(
+		t,
+		input,
+		[]func(iter.Seq2[int, error]) valuesResult{
+			func(seq iter.Seq2[int, error]) (result valuesResult) {
+				result.Err = opiter.TryForEach(func(v int) {
+					result.Values = append(result.Values, v)
+				}, seq)
+				return result
+			},
+			func(seq iter.Seq2[int, error]) valuesResult {
+				values, err := opiter.TryCollect(seq)
+				return valuesResult{Values: values, Err: err}
+			},
+			func(seq iter.Seq2[int, error]) valuesResult {
+				values, err := opiter.TryAppendSeq([]int{}, seq)
+				return valuesResult{Values: values, Err: err}
+			},
+			func(seq iter.Seq2[int, error]) valuesResult {
+				values, err := opiter.TryReduce(func(values []int, v int) []int {
+					return append(values, v)
+				}, []int{}, seq)
+				return valuesResult{Values: values, Err: err}
+			},
+		},
+		valuesResult{Values: []int{3, 1, 4}},
+		[]goCmp.Option{testhelper.CompareErrorsIs},
+	)
+}
+
 func TestTryMapReducers(t *testing.T) {
 	errStop := errors.New("stop")
 	input := opiter.Values2([]opiter.KV[opiter.KV[string, int], error]{
@@ -105,4 +158,11 @@ func TestTryMapReducers(t *testing.T) {
 		expected,
 		[]goCmp.Option{testhelper.CompareErrorsIs},
 	)
+
+	m, err := opiter.TryMapsCollect(opiter.Values2([]opiter.KV[opiter.KV[string, int], error]{
+		{K: opiter.PackKV("a", 1)},
+		{K: opiter.PackKV("b", 2)},
+	}))
+	assert.NilError(t, err)
+	assert.DeepEqual(t, map[string]int{"a": 1, "b": 2}, m)
 }

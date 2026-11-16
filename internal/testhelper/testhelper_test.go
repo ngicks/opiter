@@ -227,11 +227,34 @@ func TestComparators(t *testing.T) {
 		notDeepEqual([]error{codedErr{code: 1}}, []error{ErrSample1}, CompareErrorsAs),
 		"CompareErrorsAs: codedErr should not equal ErrSample1",
 	)
+	assert.DeepEqual(t, []error{nil}, []error{nil}, CompareErrorsAs)
+	assert.Assert(
+		t,
+		notDeepEqual([]error{codedErr{code: 1}}, []error{nil}, CompareErrorsAs),
+		"CompareErrorsAs: non-nil should not equal nil",
+	)
+
+	type a struct{ Foo int }
+	type b struct{ Foo string }
+	type c struct{ Bar int }
+	fieldOf := func(v any) reflect.StructField { return reflect.TypeOf(v).Field(0) }
+	assert.DeepEqual(t, fieldOf(a{}), fieldOf(b{}), CompareReflectStructFieldSameType)
+	assert.Assert(
+		t,
+		notDeepEqual(fieldOf(a{}), fieldOf(c{}), CompareReflectStructFieldSameType),
+		"CompareReflectStructFieldSameType: Foo should not equal Bar",
+	)
 
 	assert.DeepEqual(t, reflect.ValueOf(1), reflect.ValueOf(1), CompareReflectValue)
 	assert.Assert(
 		t,
 		notDeepEqual(reflect.ValueOf(1), reflect.ValueOf(2), CompareReflectValue),
 		"CompareReflectValue: 1 should not equal 2",
+	)
+	// Comparing slices through any panics; the comparer recovers and reports unequal.
+	assert.Assert(
+		t,
+		notDeepEqual(reflect.ValueOf([]int{1}), reflect.ValueOf([]int{1}), CompareReflectValue),
+		"CompareReflectValue: uncomparable values should not be equal",
 	)
 }

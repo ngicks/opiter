@@ -137,3 +137,21 @@ func TestLimitVariants2Stateful(t *testing.T) {
 	}
 	testhelper.TestFilterStateful2(t, testhelper.SampleSeq2(), filters, testhelper.SamplePairs, nil)
 }
+
+func TestLimitNonPositive(t *testing.T) {
+	filters := []func(iter.Seq[int]) iter.Seq[int]{
+		func(s iter.Seq[int]) iter.Seq[int] { return opiter.Limit(0, s) },
+		func(s iter.Seq[int]) iter.Seq[int] { return opiter.WrapSeq(s).Limit(-1).Iter() },
+	}
+	testhelper.TestFilterStateless(t, testhelper.SampleSeq(), filters, nil, nil)
+}
+
+func TestLimit2NonPositive(t *testing.T) {
+	filters := []func(iter.Seq2[string, int]) iter.Seq2[string, int]{
+		func(s iter.Seq2[string, int]) iter.Seq2[string, int] { return opiter.Limit2(0, s) },
+		func(s iter.Seq2[string, int]) iter.Seq2[string, int] {
+			return opiter.WrapSeq2(s).Limit(-1).Iter2()
+		},
+	}
+	testhelper.TestFilterStateless2(t, testhelper.SampleSeq2(), filters, nil, nil)
+}

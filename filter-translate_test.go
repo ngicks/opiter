@@ -61,6 +61,9 @@ func TestTranslatePairShapes(t *testing.T) {
 		[]func(iter.Seq2[int, string]) iter.Seq[string]{
 			func(s iter.Seq2[int, string]) iter.Seq[string] { return opiter.OmitF(s) },
 			func(s iter.Seq2[int, string]) iter.Seq[string] {
+				return opiter.WrapSeq2(s).OmitF().Iter()
+			},
+			func(s iter.Seq2[int, string]) iter.Seq[string] {
 				return opiter.Assemble(func(k int, v string) string { return v }, s)
 			},
 			func(s iter.Seq2[int, string]) iter.Seq[string] {

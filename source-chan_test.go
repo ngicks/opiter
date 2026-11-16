@@ -5,9 +5,11 @@ import (
 	"iter"
 	"slices"
 	"testing"
+	"testing/synctest"
 
 	"github.com/ngicks/opiter"
 	"github.com/ngicks/opiter/internal/testhelper"
+	"gotest.tools/v3/assert"
 )
 
 func TestChan(t *testing.T) {
@@ -34,4 +36,18 @@ func TestChanCanceled(t *testing.T) {
 	if got := slices.Collect(opiter.Chan(ctx, ch)); len(got) != 0 {
 		t.Errorf("canceled iterator yielded %v", got)
 	}
+}
+
+func TestChanCanceledWhileWaiting(t *testing.T) {
+	// synctest.Wait guarantees the iterator is blocked on the receive before cancel,
+	// so the cancellation is observed while waiting rather than before it.
+	synctest.Test(t, func(t *testing.T) {
+		ctx, cancel := context.WithCancel(t.Context())
+		ch := make(chan int)
+		done := make(chan []int)
+		go func() { done <- slices.Collect(opiter.Chan(ctx, ch)) }()
+		synctest.Wait()
+		cancel()
+		assert.Equal(t, 0, len(<-done))
+	})
 }
