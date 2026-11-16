@@ -1,0 +1,17 @@
+amends "package://github.com/jdx/hk/releases/download/v2.12.0/hk@2.12.0#/Config.pkl"
+
+import ".hk/go-golangci-lint.pkl" as go_golangci_lint
+import ".hk/go-vet-ngcheckers.pkl" as go_vet_ngcheckers
+import ".hk/markdown-mermaid-lint.pkl" as markdown_mermaid_lint
+
+hooks {
+  ["pre-commit"] {
+    fix = true
+    stash = "git"
+    steps {
+      ...go_golangci_lint.steps
+      ...go_vet_ngcheckers.steps
+      ...markdown_mermaid_lint.steps
+    }
+  }
+}
