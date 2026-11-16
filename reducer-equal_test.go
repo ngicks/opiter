@@ -54,7 +54,13 @@ func TestSeqEqualFunc(t *testing.T) {
 	for i, v := range testhelper.SampleValues {
 		otherValues[i] = int64(v)
 	}
-	assert.Assert(t, seq.EqualFunc(func(a int, b int64) bool { return int64(a) == b }, slices.Values(otherValues)))
+	assert.Assert(
+		t,
+		seq.EqualFunc(
+			func(a int, b int64) bool { return int64(a) == b },
+			slices.Values(otherValues),
+		),
+	)
 
 	seq2 := opiter.WrapSeq2(testhelper.SampleSeq2())
 	otherPairs := make([]opiter.KV[string, int64], len(testhelper.SamplePairs))

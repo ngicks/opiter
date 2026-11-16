@@ -17,22 +17,23 @@ type namedSeq[V any] func(yield func(V) bool)
 type namedSeq2[K, V any] func(yield func(K, V) bool)
 
 func TestZip(t *testing.T) {
+	type zipped = tuple.Tuple2[opt.Option[int], opt.Option[string]]
 	cmpOpt := []goCmp.Option{goCmp.Comparer(func(
-		x, y tuple.Tuple2[opt.Option[int], opt.Option[string]],
+		x, y zipped,
 	) bool {
 		return x.V1.EqualFunc(y.V1, func(a, b int) bool { return a == b }) &&
 			x.V2.EqualFunc(y.V2, func(a, b string) bool { return a == b })
 	})}
 
-	leftOnlyExpected := []tuple.Tuple2[opt.Option[int], opt.Option[string]]{
+	leftOnlyExpected := []zipped{
 		{V1: opt.Some(1), V2: opt.Some("a")},
 		{V1: opt.Some(2), V2: opt.None[string]()},
 	}
-	leftOnlyFilters := []func(iter.Seq[int]) iter.Seq[tuple.Tuple2[opt.Option[int], opt.Option[string]]]{
-		func(s iter.Seq[int]) iter.Seq[tuple.Tuple2[opt.Option[int], opt.Option[string]]] {
+	leftOnlyFilters := []func(iter.Seq[int]) iter.Seq[zipped]{
+		func(s iter.Seq[int]) iter.Seq[zipped] {
 			return opiter.Zip(s, namedSeq[string](slices.Values([]string{"a"})))
 		},
-		func(s iter.Seq[int]) iter.Seq[tuple.Tuple2[opt.Option[int], opt.Option[string]]] {
+		func(s iter.Seq[int]) iter.Seq[zipped] {
 			return opiter.WrapSeq(s).Zip(namedSeq[string](slices.Values([]string{"a"}))).Iter()
 		},
 	}
@@ -51,15 +52,15 @@ func TestZip(t *testing.T) {
 		t.Fatalf("Unpack() = %v, %v", left, right)
 	}
 
-	rightOnlyExpected := []tuple.Tuple2[opt.Option[int], opt.Option[string]]{
+	rightOnlyExpected := []zipped{
 		{V1: opt.Some(1), V2: opt.Some("a")},
 		{V1: opt.None[int](), V2: opt.Some("b")},
 	}
-	rightOnlyFilters := []func(iter.Seq[int]) iter.Seq[tuple.Tuple2[opt.Option[int], opt.Option[string]]]{
-		func(s iter.Seq[int]) iter.Seq[tuple.Tuple2[opt.Option[int], opt.Option[string]]] {
+	rightOnlyFilters := []func(iter.Seq[int]) iter.Seq[zipped]{
+		func(s iter.Seq[int]) iter.Seq[zipped] {
 			return opiter.Zip(s, namedSeq[string](slices.Values([]string{"a", "b"})))
 		},
-		func(s iter.Seq[int]) iter.Seq[tuple.Tuple2[opt.Option[int], opt.Option[string]]] {
+		func(s iter.Seq[int]) iter.Seq[zipped] {
 			return opiter.WrapSeq(s).Zip(namedSeq[string](slices.Values([]string{"a", "b"}))).Iter()
 		},
 	}
@@ -83,10 +84,18 @@ func TestZip(t *testing.T) {
 		return x.V1.EqualFunc(y.V1, func(a, b int) bool { return a == b }) &&
 			x.V2.EqualFunc(y.V2, func(a, b int) bool { return a == b })
 	})
-	if diff := goCmp.Diff(namedExpected, slices.Collect(opiter.Zip(namedLeft, namedRight)), namedCmp); diff != "" {
+	if diff := goCmp.Diff(
+		namedExpected,
+		slices.Collect(opiter.Zip(namedLeft, namedRight)),
+		namedCmp,
+	); diff != "" {
 		t.Fatalf("Zip(namedSeq, namedSeq) mismatch (-want +got):\n%s", diff)
 	}
-	if diff := goCmp.Diff(namedExpected, slices.Collect(opiter.WrapSeq(namedLeft).Zip(namedRight).Iter()), namedCmp); diff != "" {
+	if diff := goCmp.Diff(
+		namedExpected,
+		slices.Collect(opiter.WrapSeq(namedLeft).Zip(namedRight).Iter()),
+		namedCmp,
+	); diff != "" {
 		t.Fatalf("Seq.Zip(namedSeq) mismatch (-want +got):\n%s", diff)
 	}
 }
@@ -113,7 +122,10 @@ func TestZip2(t *testing.T) {
 	}
 	leftOnlyFilters := []func(iter.Seq2[int, string]) iter.Seq[zipped]{
 		func(s iter.Seq2[int, string]) iter.Seq[zipped] {
-			return opiter.Zip2(s, namedSeq2[string, int](opiter.Values2([]opiter.KV[string, int]{{"x", 3}})))
+			return opiter.Zip2(
+				s,
+				namedSeq2[string, int](opiter.Values2([]opiter.KV[string, int]{{"x", 3}})),
+			)
 		},
 		func(s iter.Seq2[int, string]) iter.Seq[zipped] {
 			return opiter.WrapSeq2(s).Zip(
@@ -184,18 +196,31 @@ func TestZip2(t *testing.T) {
 		return x.V1.EqualFunc(y.V1, func(a, b opiter.KV[int, string]) bool { return a == b }) &&
 			x.V2.EqualFunc(y.V2, func(a, b opiter.KV[int, string]) bool { return a == b })
 	})
-	if diff := goCmp.Diff(namedExpected, slices.Collect(opiter.Zip2(namedLeft, namedRight)), namedCmp); diff != "" {
+	if diff := goCmp.Diff(
+		namedExpected,
+		slices.Collect(opiter.Zip2(namedLeft, namedRight)),
+		namedCmp,
+	); diff != "" {
 		t.Fatalf("Zip2(namedSeq2, namedSeq2) mismatch (-want +got):\n%s", diff)
 	}
-	if diff := goCmp.Diff(namedExpected, slices.Collect(opiter.WrapSeq2(namedLeft).Zip(namedRight).Iter()), namedCmp); diff != "" {
+	if diff := goCmp.Diff(
+		namedExpected,
+		slices.Collect(opiter.WrapSeq2(namedLeft).Zip(namedRight).Iter()),
+		namedCmp,
+	); diff != "" {
 		t.Fatalf("Seq2.Zip(namedSeq2) mismatch (-want +got):\n%s", diff)
 	}
 }
 
+// requireType fails compilation unless the argument is assignable to T.
+// A plain typed declaration would do the same, but staticcheck rejects it as redundant.
+func requireType[T any](T) {}
+
 func TestZipMethodsReturnSeq(t *testing.T) {
 	type zipped = tuple.Tuple2[opt.Option[int], opt.Option[string]]
-	var seq opiter.Seq[zipped] = opiter.WrapSeq(slices.Values([]int{1})).
+	seq := opiter.WrapSeq(slices.Values([]int{1})).
 		Zip(namedSeq[string](slices.Values([]string{"a"})))
+	requireType[opiter.Seq[zipped]](seq)
 	if got := slices.Collect(seq.Limit(1).Iter()); len(got) != 1 {
 		t.Fatalf("Seq.Zip(...).Limit(1) yielded %d values", len(got))
 	}
@@ -210,11 +235,12 @@ func TestZipMethodsReturnSeq(t *testing.T) {
 		opt.Option[opiter.KV[int, string]],
 		opt.Option[opiter.KV[string, int]],
 	]
-	var seq2 opiter.Seq[zipped2] = opiter.WrapSeq2(
+	seq2 := opiter.WrapSeq2(
 		opiter.Values2([]opiter.KV[int, string]{{1, "a"}}),
 	).Zip(namedSeq2[string, int](
 		opiter.Values2([]opiter.KV[string, int]{{"x", 2}}),
 	))
+	requireType[opiter.Seq[zipped2]](seq2)
 	if got := slices.Collect(seq2.Limit(1).Iter()); len(got) != 1 {
 		t.Fatalf("Seq2.Zip(...).Limit(1) yielded %d values", len(got))
 	}

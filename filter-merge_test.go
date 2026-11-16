@@ -17,7 +17,9 @@ func TestMergeVariants(t *testing.T) {
 			return opiter.MergeFunc(cmp.Compare[int], s, slices.Values([]int{2, 4, 6}))
 		},
 		func(s iter.Seq[int]) iter.Seq[int] {
-			return opiter.WrapSeq(s).MergeFunc(cmp.Compare[int], slices.Values([]int{2, 4, 6})).Iter()
+			return opiter.WrapSeq(s).
+				MergeFunc(cmp.Compare[int], slices.Values([]int{2, 4, 6})).
+				Iter()
 		},
 	}
 	input := slices.Values([]int{1, 3, 5})

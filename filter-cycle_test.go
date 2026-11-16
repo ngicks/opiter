@@ -28,9 +28,18 @@ func TestCycleVariants2(t *testing.T) {
 	expected := []opiter.KV[int, int]{{1, 2}, {3, 4}, {1, 2}}
 	seqs := []opiter.Seq2[int, int]{
 		opiter.WrapSeq2(opiter.Limit2(3, opiter.Cycle2(input))),
-		opiter.WrapSeq2(opiter.Limit2(3, opiter.CycleBuffered2(testhelper.OneShotSeq2(opiter.PackKV(1, 2), opiter.PackKV(3, 4))))),
+		opiter.WrapSeq2(
+			opiter.Limit2(
+				3,
+				opiter.CycleBuffered2(
+					testhelper.OneShotSeq2(opiter.PackKV(1, 2), opiter.PackKV(3, 4)),
+				),
+			),
+		),
 		opiter.WrapSeq2(input).Cycle().Limit(3),
-		opiter.WrapSeq2(testhelper.OneShotSeq2(opiter.PackKV(1, 2), opiter.PackKV(3, 4))).CycleBuffered().Limit(3),
+		opiter.WrapSeq2(testhelper.OneShotSeq2(opiter.PackKV(1, 2), opiter.PackKV(3, 4))).
+			CycleBuffered().
+			Limit(3),
 	}
 	for i, seq := range seqs {
 		if got := opiter.Collect2(seq.Iter2()); !slices.Equal(got, expected) {

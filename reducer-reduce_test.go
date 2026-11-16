@@ -33,7 +33,11 @@ func TestReduce(t *testing.T) {
 		14,
 		nil,
 	)
-	assert.Equal(t, 42, opiter.Reduce(func(sum, v int) int { return sum + v }, 42, slices.Values([]int{})))
+	assert.Equal(
+		t,
+		42,
+		opiter.Reduce(func(sum, v int) int { return sum + v }, 42, slices.Values([]int{})),
+	)
 }
 
 func TestSeqReduce(t *testing.T) {

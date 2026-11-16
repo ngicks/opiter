@@ -29,7 +29,10 @@ func takeN[V any](seq iter.Seq[V], n int) (got []V, rej V, rejected bool) {
 }
 
 // takeN2 is [takeN] for iter.Seq2-shaped iterators.
-func takeN2[K, V any](seq iter.Seq2[K, V], n int) (got []opiter.KV[K, V], rej opiter.KV[K, V], rejected bool) {
+func takeN2[K, V any](
+	seq iter.Seq2[K, V],
+	n int,
+) (got []opiter.KV[K, V], rej opiter.KV[K, V], rejected bool) {
 	for k, v := range seq {
 		if len(got) >= n {
 			rej = opiter.PackKV(k, v)
@@ -42,7 +45,12 @@ func takeN2[K, V any](seq iter.Seq2[K, V], n int) (got []opiter.KV[K, V], rej op
 }
 
 // assertValues compares slices treating nil and empty as equal at the top level.
-func assertValues[V any](t *testing.T, expected, got []V, cmpOpt []goCmp.Option, msgAndArgs ...any) {
+func assertValues[V any](
+	t *testing.T,
+	expected, got []V,
+	cmpOpt []goCmp.Option,
+	msgAndArgs ...any,
+) {
 	t.Helper()
 	if len(expected) == 0 && len(got) == 0 {
 		return

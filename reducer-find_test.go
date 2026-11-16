@@ -48,7 +48,10 @@ func TestFind(t *testing.T) {
 				return opiter.Find2("foo", 1, seq)
 			},
 			func(seq iter.Seq2[string, int]) opt.Option[indexedPair] {
-				return opiter.FindFunc2(func(k string, v int) bool { return k == "foo" && v == 1 }, seq)
+				return opiter.FindFunc2(
+					func(k string, v int) bool { return k == "foo" && v == 1 },
+					seq,
+				)
 			},
 		},
 		opt.Some(opiter.PackKV(3, opiter.PackKV("foo", 1))),
@@ -62,7 +65,10 @@ func TestFind(t *testing.T) {
 				return opiter.FindLast2("foo", 3, seq)
 			},
 			func(seq iter.Seq2[string, int]) opt.Option[indexedPair] {
-				return opiter.FindLastFunc2(func(k string, v int) bool { return k == "foo" && v == 3 }, seq)
+				return opiter.FindLastFunc2(
+					func(k string, v int) bool { return k == "foo" && v == 3 },
+					seq,
+				)
 			},
 		},
 		opt.Some(opiter.PackKV(0, opiter.PackKV("foo", 3))),

@@ -52,7 +52,12 @@ func testFilterStateful2One[K, V, K2, V2 any](
 	t.Helper()
 
 	pairs := opiter.Collect2(input)
-	testSourceStateful2One(t, func() iter.Seq2[K2, V2] { return filter(OneShotSeq2(pairs...)) }, expected, cmpOpt)
+	testSourceStateful2One(
+		t,
+		func() iter.Seq2[K2, V2] { return filter(OneShotSeq2(pairs...)) },
+		expected,
+		cmpOpt,
+	)
 }
 
 func testFilterStateless2To1One[K, V, U any](
@@ -98,7 +103,12 @@ func testFilterStateful2To1One[K, V, U any](
 	t.Helper()
 
 	pairs := opiter.Collect2(input)
-	testSourceStatefulOne(t, func() iter.Seq[U] { return filter(OneShotSeq2(pairs...)) }, expected, cmpOpt)
+	testSourceStatefulOne(
+		t,
+		func() iter.Seq[U] { return filter(OneShotSeq2(pairs...)) },
+		expected,
+		cmpOpt,
+	)
 }
 
 func testFilterStateless2[K, V, K2, V2 any](

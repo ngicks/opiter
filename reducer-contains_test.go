@@ -28,7 +28,10 @@ func TestContains(t *testing.T) {
 		[]func(iter.Seq2[string, int]) bool{
 			func(seq iter.Seq2[string, int]) bool { return opiter.Contains2("baz", 4, seq) },
 			func(seq iter.Seq2[string, int]) bool {
-				return opiter.ContainsFunc2(func(k string, v int) bool { return k == "baz" && v == 4 }, seq)
+				return opiter.ContainsFunc2(
+					func(k string, v int) bool { return k == "baz" && v == 4 },
+					seq,
+				)
 			},
 		},
 		true,
@@ -38,7 +41,10 @@ func TestContains(t *testing.T) {
 }
 
 func TestSeqContainsFunc(t *testing.T) {
-	assert.Assert(t, opiter.WrapSeq(testhelper.SampleSeq()).ContainsFunc(func(v int) bool { return v == 4 }))
+	assert.Assert(
+		t,
+		opiter.WrapSeq(testhelper.SampleSeq()).ContainsFunc(func(v int) bool { return v == 4 }),
+	)
 	assert.Assert(t, opiter.WrapSeq2(testhelper.SampleSeq2()).ContainsFunc2(
 		func(k string, v int) bool { return k == "baz" && v == 4 },
 	))

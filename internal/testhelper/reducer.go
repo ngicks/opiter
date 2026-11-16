@@ -30,7 +30,10 @@ func testReducerOne[V, R any](
 	got = reduce(func(yield func(V) bool) {
 		invocations++
 		if invocations > 1 {
-			t.Errorf("input invoked %d times; reducers must work on single-use iterators", invocations)
+			t.Errorf(
+				"input invoked %d times; reducers must work on single-use iterators",
+				invocations,
+			)
 		}
 		oneShot(yield)
 	})
@@ -55,7 +58,10 @@ func testReducer2One[K, V, R any](
 	got = reduce(func(yield func(K, V) bool) {
 		invocations++
 		if invocations > 1 {
-			t.Errorf("input invoked %d times; reducers must work on single-use iterators", invocations)
+			t.Errorf(
+				"input invoked %d times; reducers must work on single-use iterators",
+				invocations,
+			)
 		}
 		oneShot(yield)
 	})

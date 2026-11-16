@@ -41,7 +41,10 @@ func TestEveryAny(t *testing.T) {
 }
 
 func TestSeqEveryAny(t *testing.T) {
-	assert.Assert(t, opiter.WrapSeq(testhelper.SampleSeq()).Every(func(v int) bool { return v > 0 }))
+	assert.Assert(
+		t,
+		opiter.WrapSeq(testhelper.SampleSeq()).Every(func(v int) bool { return v > 0 }),
+	)
 	assert.Assert(t, opiter.WrapSeq(testhelper.SampleSeq()).Any(func(v int) bool { return v == 4 }))
 	assert.Assert(t, opiter.WrapSeq2(testhelper.SampleSeq2()).Every2(
 		func(k string, v int) bool { return k != "" && v > 0 },

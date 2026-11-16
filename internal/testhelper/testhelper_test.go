@@ -23,7 +23,12 @@ func TestSourceHelpers(t *testing.T) {
 		SampleValues,
 		nil,
 	)
-	TestSourceStateless(t, []func() iter.Seq[int]{func() iter.Seq[int] { return OneShotSeq[int]() }}, nil, nil)
+	TestSourceStateless(
+		t,
+		[]func() iter.Seq[int]{func() iter.Seq[int] { return OneShotSeq[int]() }},
+		nil,
+		nil,
+	)
 	TestSourceStateful(
 		t,
 		[]func() iter.Seq[int]{func() iter.Seq[int] { return OneShotSeq(SampleValues...) }},
@@ -34,7 +39,9 @@ func TestSourceHelpers(t *testing.T) {
 	TestSourceStateless2(t, []func() iter.Seq2[string, int]{SampleSeq2}, SamplePairs, nil)
 	TestSourceStateful2(
 		t,
-		[]func() iter.Seq2[string, int]{func() iter.Seq2[string, int] { return OneShotSeq2(SamplePairs...) }},
+		[]func() iter.Seq2[string, int]{
+			func() iter.Seq2[string, int] { return OneShotSeq2(SamplePairs...) },
+		},
 		SamplePairs,
 		nil,
 	)
@@ -61,8 +68,8 @@ func TestFilterHelpers(t *testing.T) {
 			// buffering severs the chain: the downstream range loop never
 			// touches s, so this collection is s's ultimate consumer.
 			vals := slices.Collect(s)
-			for i := len(vals) - 1; i >= 0; i-- {
-				if !yield(vals[i]) {
+			for _, val := range slices.Backward(vals) {
+				if !yield(val) {
 					return
 				}
 			}
@@ -92,8 +99,20 @@ func TestFilterHelpers(t *testing.T) {
 		{K: 1, V: "foo"},
 		{K: 5, V: "qux"},
 	}
-	TestFilterStateless2(t, SampleSeq2(), []func(iter.Seq2[string, int]) iter.Seq2[int, string]{swap}, swapped, nil)
-	TestFilterStateful2(t, SampleSeq2(), []func(iter.Seq2[string, int]) iter.Seq2[int, string]{swap}, swapped, nil)
+	TestFilterStateless2(
+		t,
+		SampleSeq2(),
+		[]func(iter.Seq2[string, int]) iter.Seq2[int, string]{swap},
+		swapped,
+		nil,
+	)
+	TestFilterStateful2(
+		t,
+		SampleSeq2(),
+		[]func(iter.Seq2[string, int]) iter.Seq2[int, string]{swap},
+		swapped,
+		nil,
+	)
 
 	join := func(s iter.Seq2[string, int]) iter.Seq[string] {
 		return func(yield func(string) bool) {
@@ -101,8 +120,20 @@ func TestFilterHelpers(t *testing.T) {
 		}
 	}
 	joined := []string{"foo:3", "bar:1", "baz:4", "foo:1", "qux:5"}
-	TestFilterStateless2To1(t, SampleSeq2(), []func(iter.Seq2[string, int]) iter.Seq[string]{join}, joined, nil)
-	TestFilterStateful2To1(t, SampleSeq2(), []func(iter.Seq2[string, int]) iter.Seq[string]{join}, joined, nil)
+	TestFilterStateless2To1(
+		t,
+		SampleSeq2(),
+		[]func(iter.Seq2[string, int]) iter.Seq[string]{join},
+		joined,
+		nil,
+	)
+	TestFilterStateful2To1(
+		t,
+		SampleSeq2(),
+		[]func(iter.Seq2[string, int]) iter.Seq[string]{join},
+		joined,
+		nil,
+	)
 
 	fan := func(s iter.Seq[int]) iter.Seq2[int, int] {
 		return func(yield func(int, int) bool) {
@@ -113,8 +144,20 @@ func TestFilterHelpers(t *testing.T) {
 	for i, v := range SampleValues {
 		fanned[i] = opiter.KV[int, int]{K: v, V: v * 2}
 	}
-	TestFilterStateless1To2(t, SampleSeq(), []func(iter.Seq[int]) iter.Seq2[int, int]{fan}, fanned, nil)
-	TestFilterStateful1To2(t, SampleSeq(), []func(iter.Seq[int]) iter.Seq2[int, int]{fan}, fanned, nil)
+	TestFilterStateless1To2(
+		t,
+		SampleSeq(),
+		[]func(iter.Seq[int]) iter.Seq2[int, int]{fan},
+		fanned,
+		nil,
+	)
+	TestFilterStateful1To2(
+		t,
+		SampleSeq(),
+		[]func(iter.Seq[int]) iter.Seq2[int, int]{fan},
+		fanned,
+		nil,
+	)
 }
 
 func TestReducerHelpers(t *testing.T) {
@@ -135,7 +178,13 @@ func TestReducerHelpers(t *testing.T) {
 		}
 		return out
 	}
-	TestReducer2(t, SampleSeq2(), []func(iter.Seq2[string, int]) string{concatKeys}, "foobarbazfooqux", nil)
+	TestReducer2(
+		t,
+		SampleSeq2(),
+		[]func(iter.Seq2[string, int]) string{concatKeys},
+		"foobarbazfooqux",
+		nil,
+	)
 }
 
 type codedErr struct{ code int }

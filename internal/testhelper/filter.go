@@ -53,7 +53,12 @@ func testFilterStatefulOne[U, V any](
 	t.Helper()
 
 	values := slices.Collect(input)
-	testSourceStatefulOne(t, func() iter.Seq[V] { return filter(OneShotSeq(values...)) }, expected, cmpOpt)
+	testSourceStatefulOne(
+		t,
+		func() iter.Seq[V] { return filter(OneShotSeq(values...)) },
+		expected,
+		cmpOpt,
+	)
 }
 
 func testFilterStateless1To2One[U, K, V any](
@@ -99,7 +104,12 @@ func testFilterStateful1To2One[U, K, V any](
 	t.Helper()
 
 	values := slices.Collect(input)
-	testSourceStateful2One(t, func() iter.Seq2[K, V] { return filter(OneShotSeq(values...)) }, expected, cmpOpt)
+	testSourceStateful2One(
+		t,
+		func() iter.Seq2[K, V] { return filter(OneShotSeq(values...)) },
+		expected,
+		cmpOpt,
+	)
 }
 
 func testFilterStateless[U, V any](

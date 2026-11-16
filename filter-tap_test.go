@@ -20,14 +20,24 @@ func TestTapVariants(t *testing.T) {
 
 func TestTapVariants2(t *testing.T) {
 	filters := []func(iter.Seq2[string, int]) iter.Seq2[string, int]{
-		func(s iter.Seq2[string, int]) iter.Seq2[string, int] { return opiter.Tap2(func(string, int) {}, s) },
+		func(s iter.Seq2[string, int]) iter.Seq2[string, int] {
+			return opiter.Tap2(func(string, int) {}, s)
+		},
 		func(s iter.Seq2[string, int]) iter.Seq2[string, int] {
 			return opiter.WrapSeq2(s).Tap(func(string, int) {}).Iter2()
 		},
-		func(s iter.Seq2[string, int]) iter.Seq2[string, int] { return opiter.TapLast2(func() {}, s) },
+		func(s iter.Seq2[string, int]) iter.Seq2[string, int] {
+			return opiter.TapLast2(func() {}, s)
+		},
 		func(s iter.Seq2[string, int]) iter.Seq2[string, int] {
 			return opiter.WrapSeq2(s).TapLast(func() {}).Iter2()
 		},
 	}
-	testhelper.TestFilterStateless2(t, testhelper.SampleSeq2(), filters, testhelper.SamplePairs, nil)
+	testhelper.TestFilterStateless2(
+		t,
+		testhelper.SampleSeq2(),
+		filters,
+		testhelper.SamplePairs,
+		nil,
+	)
 }

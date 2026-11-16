@@ -135,7 +135,12 @@ func testSourceStateless[V any, Iter ~func(yield func(V) bool)](
 	t.Helper()
 	for i, mk := range sources {
 		t.Run(fmt.Sprintf("sources[%d]", i), func(t *testing.T) {
-			testSourceStatelessOne(t, func() iter.Seq[V] { return iter.Seq[V](mk()) }, expected, cmpOpt)
+			testSourceStatelessOne(
+				t,
+				func() iter.Seq[V] { return iter.Seq[V](mk()) },
+				expected,
+				cmpOpt,
+			)
 		})
 	}
 }
@@ -149,7 +154,12 @@ func testSourceStateful[V any, Iter ~func(yield func(V) bool)](
 	t.Helper()
 	for i, mk := range sources {
 		t.Run(fmt.Sprintf("sources[%d]", i), func(t *testing.T) {
-			testSourceStatefulOne(t, func() iter.Seq[V] { return iter.Seq[V](mk()) }, expected, cmpOpt)
+			testSourceStatefulOne(
+				t,
+				func() iter.Seq[V] { return iter.Seq[V](mk()) },
+				expected,
+				cmpOpt,
+			)
 		})
 	}
 }
@@ -163,7 +173,12 @@ func testSourceStateless2[K, V any, Iter ~func(yield func(K, V) bool)](
 	t.Helper()
 	for i, mk := range sources {
 		t.Run(fmt.Sprintf("sources[%d]", i), func(t *testing.T) {
-			testSourceStateless2One(t, func() iter.Seq2[K, V] { return iter.Seq2[K, V](mk()) }, expected, cmpOpt)
+			testSourceStateless2One(
+				t,
+				func() iter.Seq2[K, V] { return iter.Seq2[K, V](mk()) },
+				expected,
+				cmpOpt,
+			)
 		})
 	}
 }
@@ -177,7 +192,12 @@ func testSourceStateful2[K, V any, Iter ~func(yield func(K, V) bool)](
 	t.Helper()
 	for i, mk := range sources {
 		t.Run(fmt.Sprintf("sources[%d]", i), func(t *testing.T) {
-			testSourceStateful2One(t, func() iter.Seq2[K, V] { return iter.Seq2[K, V](mk()) }, expected, cmpOpt)
+			testSourceStateful2One(
+				t,
+				func() iter.Seq2[K, V] { return iter.Seq2[K, V](mk()) },
+				expected,
+				cmpOpt,
+			)
 		})
 	}
 }

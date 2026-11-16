@@ -29,7 +29,9 @@ func TestCompactVariants2(t *testing.T) {
 	filters := []func(iter.Seq2[int, int]) iter.Seq2[int, int]{
 		func(s iter.Seq2[int, int]) iter.Seq2[int, int] { return opiter.Compact2(s) },
 		func(s iter.Seq2[int, int]) iter.Seq2[int, int] { return opiter.CompactFunc2(eq, s) },
-		func(s iter.Seq2[int, int]) iter.Seq2[int, int] { return opiter.WrapSeq2(s).CompactFunc(eq).Iter2() },
+		func(s iter.Seq2[int, int]) iter.Seq2[int, int] {
+			return opiter.WrapSeq2(s).CompactFunc(eq).Iter2()
+		},
 	}
 	expected := []opiter.KV[int, int]{{1, 1}, {2, 2}}
 	testhelper.TestFilterStateless2(t, input, filters, expected, nil)

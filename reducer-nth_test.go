@@ -39,5 +39,9 @@ func TestNth(t *testing.T) {
 
 func TestSeqNth(t *testing.T) {
 	assert.Equal(t, 4, opiter.WrapSeq(testhelper.SampleSeq()).Nth(2).Value())
-	assert.DeepEqual(t, opiter.PackKV("baz", 4), opiter.WrapSeq2(testhelper.SampleSeq2()).Nth2(2).Value())
+	assert.DeepEqual(
+		t,
+		opiter.PackKV("baz", 4),
+		opiter.WrapSeq2(testhelper.SampleSeq2()).Nth2(2).Value(),
+	)
 }

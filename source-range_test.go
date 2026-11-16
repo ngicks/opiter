@@ -55,10 +55,20 @@ func TestRange(t *testing.T) {
 }
 
 func TestRangeIntegerBounds(t *testing.T) {
-	if got := slices.Collect(opiter.RangeInclusive(uint8(math.MaxUint8-1), uint8(math.MaxUint8), true, true)); !slices.Equal(got, []uint8{math.MaxUint8 - 1, math.MaxUint8}) {
+	if got := slices.Collect(
+		opiter.RangeInclusive(uint8(math.MaxUint8-1), uint8(math.MaxUint8), true, true),
+	); !slices.Equal(
+		got,
+		[]uint8{math.MaxUint8 - 1, math.MaxUint8},
+	) {
 		t.Errorf("ascending at maximum: got %v", got)
 	}
-	if got := slices.Collect(opiter.RangeInclusive(uint8(1), uint8(0), true, true)); !slices.Equal(got, []uint8{1, 0}) {
+	if got := slices.Collect(
+		opiter.RangeInclusive(uint8(1), uint8(0), true, true),
+	); !slices.Equal(
+		got,
+		[]uint8{1, 0},
+	) {
 		t.Errorf("descending at minimum: got %v", got)
 	}
 }

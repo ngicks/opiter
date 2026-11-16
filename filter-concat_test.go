@@ -27,7 +27,9 @@ func TestConcat2(t *testing.T) {
 			return opiter.Concat2(seq, opiter.Values2([]opiter.KV[int, int]{{3, 4}}))
 		},
 		func(seq iter.Seq2[int, int]) iter.Seq2[int, int] {
-			return opiter.WrapSeq2(seq).Concat(opiter.Values2([]opiter.KV[int, int]{{3, 4}})).Iter2()
+			return opiter.WrapSeq2(seq).
+				Concat(opiter.Values2([]opiter.KV[int, int]{{3, 4}})).
+				Iter2()
 		},
 	}
 	expected := []opiter.KV[int, int]{{1, 2}, {3, 4}}

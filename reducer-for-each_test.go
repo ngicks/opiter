@@ -36,7 +36,10 @@ func TestForEachDiscard(t *testing.T) {
 		testhelper.SampleSeq2(),
 		[]func(iter.Seq2[string, int]) []opiter.KV[string, int]{
 			func(seq iter.Seq2[string, int]) (got []opiter.KV[string, int]) {
-				opiter.ForEach2(func(k string, v int) { got = append(got, opiter.PackKV(k, v)) }, seq)
+				opiter.ForEach2(
+					func(k string, v int) { got = append(got, opiter.PackKV(k, v)) },
+					seq,
+				)
 				return got
 			},
 			func(seq iter.Seq2[string, int]) (got []opiter.KV[string, int]) {

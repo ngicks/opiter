@@ -23,7 +23,11 @@ func TestRepeat(t *testing.T) {
 		[]func() iter.Seq2[string, int]{
 			func() iter.Seq2[string, int] { return opiter.Repeat2("four", 4, 3) },
 			func() iter.Seq2[string, int] {
-				return opiter.RepeatFunc2(func() string { return "four" }, func() int { return 4 }, 3)
+				return opiter.RepeatFunc2(
+					func() string { return "four" },
+					func() int { return 4 },
+					3,
+				)
 			},
 		},
 		[]opiter.KV[string, int]{
@@ -52,10 +56,16 @@ func TestRepeatInfiniteStops(t *testing.T) {
 	}
 
 	count = 0
-	opiter.RepeatFunc2(func() int { return count }, func() int { return count }, -1)(func(_, _ int) bool {
-		count++
-		return count < 5
-	})
+	opiter.RepeatFunc2(
+		func() int { return count },
+		func() int { return count },
+		-1,
+	)(
+		func(_, _ int) bool {
+			count++
+			return count < 5
+		},
+	)
 	if count != 5 {
 		t.Errorf("RepeatFunc2 yielded %d pairs, want 5", count)
 	}

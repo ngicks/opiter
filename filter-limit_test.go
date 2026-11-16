@@ -16,13 +16,32 @@ func TestLimitVariants(t *testing.T) {
 		expected []int
 	}
 	cases := []testCase{
-		{"limit", func(s iter.Seq[int]) iter.Seq[int] { return opiter.Limit(3, s) }, func(s iter.Seq[int]) iter.Seq[int] { return opiter.WrapSeq(s).Limit(3).Iter() }, []int{3, 1, 4}},
-		{"until", func(s iter.Seq[int]) iter.Seq[int] { return opiter.LimitUntil(func(v int) bool { return v < 5 }, s) }, func(s iter.Seq[int]) iter.Seq[int] {
-			return opiter.WrapSeq(s).LimitUntil(func(v int) bool { return v < 5 }).Iter()
-		}, []int{3, 1, 4, 1}},
-		{"after", func(s iter.Seq[int]) iter.Seq[int] { return opiter.LimitAfter(func(v int) bool { return v < 5 }, s) }, func(s iter.Seq[int]) iter.Seq[int] {
-			return opiter.WrapSeq(s).LimitAfter(func(v int) bool { return v < 5 }).Iter()
-		}, []int{3, 1, 4, 1, 5}},
+		{
+			"limit",
+			func(s iter.Seq[int]) iter.Seq[int] { return opiter.Limit(3, s) },
+			func(s iter.Seq[int]) iter.Seq[int] { return opiter.WrapSeq(s).Limit(3).Iter() },
+			[]int{3, 1, 4},
+		},
+		{
+			"until",
+			func(s iter.Seq[int]) iter.Seq[int] {
+				return opiter.LimitUntil(func(v int) bool { return v < 5 }, s)
+			},
+			func(s iter.Seq[int]) iter.Seq[int] {
+				return opiter.WrapSeq(s).LimitUntil(func(v int) bool { return v < 5 }).Iter()
+			},
+			[]int{3, 1, 4, 1},
+		},
+		{
+			"after",
+			func(s iter.Seq[int]) iter.Seq[int] {
+				return opiter.LimitAfter(func(v int) bool { return v < 5 }, s)
+			},
+			func(s iter.Seq[int]) iter.Seq[int] {
+				return opiter.WrapSeq(s).LimitAfter(func(v int) bool { return v < 5 }).Iter()
+			},
+			[]int{3, 1, 4, 1, 5},
+		},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -40,16 +59,27 @@ func TestLimitVariants2(t *testing.T) {
 		expected []opiter.KV[string, int]
 	}
 	cases := []testCase{
-		{"limit", func(s iter.Seq2[string, int]) iter.Seq2[string, int] { return opiter.Limit2(2, s) }, func(s iter.Seq2[string, int]) iter.Seq2[string, int] { return opiter.WrapSeq2(s).Limit(2).Iter2() }, testhelper.SamplePairs[:2]},
+		{
+			"limit",
+			func(s iter.Seq2[string, int]) iter.Seq2[string, int] { return opiter.Limit2(2, s) },
+			func(s iter.Seq2[string, int]) iter.Seq2[string, int] {
+				return opiter.WrapSeq2(s).Limit(2).Iter2()
+			},
+			testhelper.SamplePairs[:2],
+		},
 		{"until", func(s iter.Seq2[string, int]) iter.Seq2[string, int] {
 			return opiter.LimitUntil2(func(_ string, v int) bool { return v < 4 }, s)
 		}, func(s iter.Seq2[string, int]) iter.Seq2[string, int] {
-			return opiter.WrapSeq2(s).LimitUntil(func(_ string, v int) bool { return v < 4 }).Iter2()
+			return opiter.WrapSeq2(s).
+				LimitUntil(func(_ string, v int) bool { return v < 4 }).
+				Iter2()
 		}, testhelper.SamplePairs[:2]},
 		{"after", func(s iter.Seq2[string, int]) iter.Seq2[string, int] {
 			return opiter.LimitAfter2(func(_ string, v int) bool { return v < 4 }, s)
 		}, func(s iter.Seq2[string, int]) iter.Seq2[string, int] {
-			return opiter.WrapSeq2(s).LimitAfter(func(_ string, v int) bool { return v < 4 }).Iter2()
+			return opiter.WrapSeq2(s).
+				LimitAfter(func(_ string, v int) bool { return v < 4 }).
+				Iter2()
 		}, testhelper.SamplePairs[:3]},
 	}
 	for _, tc := range cases {
@@ -62,9 +92,15 @@ func TestLimitVariants2(t *testing.T) {
 
 func TestLimitVariantsStateful(t *testing.T) {
 	filters := []func(iter.Seq[int]) iter.Seq[int]{
-		func(s iter.Seq[int]) iter.Seq[int] { return opiter.Limit(len(testhelper.SampleValues), s) },
-		func(s iter.Seq[int]) iter.Seq[int] { return opiter.LimitUntil(func(int) bool { return true }, s) },
-		func(s iter.Seq[int]) iter.Seq[int] { return opiter.LimitAfter(func(int) bool { return true }, s) },
+		func(s iter.Seq[int]) iter.Seq[int] {
+			return opiter.Limit(len(testhelper.SampleValues), s)
+		},
+		func(s iter.Seq[int]) iter.Seq[int] {
+			return opiter.LimitUntil(func(int) bool { return true }, s)
+		},
+		func(s iter.Seq[int]) iter.Seq[int] {
+			return opiter.LimitAfter(func(int) bool { return true }, s)
+		},
 		func(s iter.Seq[int]) iter.Seq[int] {
 			return opiter.WrapSeq(s).Limit(len(testhelper.SampleValues)).Iter()
 		},
