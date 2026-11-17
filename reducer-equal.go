@@ -66,8 +66,8 @@ func EqualFunc2[
 	return !ok
 }
 
-// EqualFunc2 reports whether seq and other yield pairs equal according to fn in the same order.
-func (seq Seq2[K, V]) EqualFunc2[K2, V2 any](
+// EqualFunc reports whether seq and other yield pairs equal according to fn in the same order.
+func (seq Seq2[K, V]) EqualFunc[K2, V2 any](
 	fn func(K, V, K2, V2) bool,
 	other iter.Seq2[K2, V2],
 ) bool {

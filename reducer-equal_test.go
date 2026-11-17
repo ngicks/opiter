@@ -74,7 +74,7 @@ func TestSeqEqualFunc(t *testing.T) {
 	for i, kv := range testhelper.SamplePairs {
 		otherPairs[i] = opiter.PackKV(kv.K, int64(kv.V))
 	}
-	assert.Assert(t, seq2.EqualFunc2(
+	assert.Assert(t, seq2.EqualFunc(
 		func(k1 string, v1 int, k2 string, v2 int64) bool {
 			return k1 == k2 && int64(v1) == v2
 		},

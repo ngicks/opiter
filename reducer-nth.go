@@ -38,7 +38,7 @@ func Nth2[Seq ~func(yield func(K, V) bool), K, V any](
 	return opt.None[KV[K, V]]()
 }
 
-// Nth2 returns the key-value pair at zero-based index n, or none if n is out of range.
-func (seq Seq2[K, V]) Nth2(n int) opt.Option[KV[K, V]] {
+// Nth returns the key-value pair at zero-based index n, or none if n is out of range.
+func (seq Seq2[K, V]) Nth(n int) opt.Option[KV[K, V]] {
 	return Nth2(n, seq)
 }

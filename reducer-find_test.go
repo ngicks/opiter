@@ -84,11 +84,11 @@ func TestSeqFindFunc(t *testing.T) {
 	last := opiter.WrapSeq(testhelper.SampleSeq()).FindLastFunc(func(v int) bool { return v == 1 })
 	assert.DeepEqual(t, opiter.PackKV(3, 1), last.Value())
 
-	found2 := opiter.WrapSeq2(testhelper.SampleSeq2()).FindFunc2(
+	found2 := opiter.WrapSeq2(testhelper.SampleSeq2()).FindFunc(
 		func(k string, v int) bool { return k == "foo" && v == 1 },
 	)
 	assert.DeepEqual(t, opiter.PackKV(3, opiter.PackKV("foo", 1)), found2.Value())
-	last2 := opiter.WrapSeq2(testhelper.SampleSeq2()).FindLastFunc2(
+	last2 := opiter.WrapSeq2(testhelper.SampleSeq2()).FindLastFunc(
 		func(k string, _ int) bool { return k == "foo" },
 	)
 	assert.DeepEqual(t, opiter.PackKV(3, opiter.PackKV("foo", 1)), last2.Value())

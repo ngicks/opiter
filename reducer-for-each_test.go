@@ -64,9 +64,9 @@ func TestSeqForEachDiscard(t *testing.T) {
 	opiter.WrapSeq(testhelper.SampleSeq()).Discard()
 
 	var got2 []opiter.KV[string, int]
-	opiter.WrapSeq2(testhelper.SampleSeq2()).ForEach2(func(k string, v int) {
+	opiter.WrapSeq2(testhelper.SampleSeq2()).ForEach(func(k string, v int) {
 		got2 = append(got2, opiter.PackKV(k, v))
 	})
 	assert.DeepEqual(t, testhelper.SamplePairs, got2)
-	opiter.WrapSeq2(testhelper.SampleSeq2()).Discard2()
+	opiter.WrapSeq2(testhelper.SampleSeq2()).Discard()
 }

@@ -28,8 +28,8 @@ func Every2[Seq ~func(yield func(K, V) bool), K, V any](
 	return true
 }
 
-// Every2 reports whether every key-value pair in seq satisfies fn.
-func (seq Seq2[K, V]) Every2(fn func(K, V) bool) bool {
+// Every reports whether every key-value pair in seq satisfies fn.
+func (seq Seq2[K, V]) Every(fn func(K, V) bool) bool {
 	return Every2(fn, seq)
 }
 
@@ -51,7 +51,7 @@ func Any2[Seq ~func(yield func(K, V) bool), K, V any](
 	return FindFunc2(fn, seq).IsSome()
 }
 
-// Any2 reports whether any key-value pair in seq satisfies fn.
-func (seq Seq2[K, V]) Any2(fn func(K, V) bool) bool {
+// Any reports whether any key-value pair in seq satisfies fn.
+func (seq Seq2[K, V]) Any(fn func(K, V) bool) bool {
 	return Any2(fn, seq)
 }

@@ -43,6 +43,6 @@ func TestSeqNth(t *testing.T) {
 	assert.DeepEqual(
 		t,
 		opiter.PackKV("baz", 4),
-		opiter.WrapSeq2(testhelper.SampleSeq2()).Nth2(2).Value(),
+		opiter.WrapSeq2(testhelper.SampleSeq2()).Nth(2).Value(),
 	)
 }

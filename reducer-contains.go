@@ -32,7 +32,7 @@ func ContainsFunc2[Seq ~func(yield func(K, V) bool), K, V any](
 	return FindFunc2(fn, seq).IsSome()
 }
 
-// ContainsFunc2 reports whether at least one key-value pair in seq satisfies fn.
-func (seq Seq2[K, V]) ContainsFunc2(fn func(K, V) bool) bool {
+// ContainsFunc reports whether at least one key-value pair in seq satisfies fn.
+func (seq Seq2[K, V]) ContainsFunc(fn func(K, V) bool) bool {
 	return ContainsFunc2(fn, seq)
 }

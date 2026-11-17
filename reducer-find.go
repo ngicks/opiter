@@ -54,8 +54,8 @@ func FindFunc2[Seq ~func(yield func(K, V) bool), K, V any](
 	return opt.None[KV[int, KV[K, V]]]()
 }
 
-// FindFunc2 returns the first key-value pair satisfying fn and its zero-based index.
-func (seq Seq2[K, V]) FindFunc2(fn func(K, V) bool) opt.Option[KV[int, KV[K, V]]] {
+// FindFunc returns the first key-value pair satisfying fn and its zero-based index.
+func (seq Seq2[K, V]) FindFunc(fn func(K, V) bool) opt.Option[KV[int, KV[K, V]]] {
 	return FindFunc2(fn, seq)
 }
 
@@ -113,7 +113,7 @@ func FindLastFunc2[Seq ~func(yield func(K, V) bool), K, V any](
 	return found
 }
 
-// FindLastFunc2 returns the final key-value pair satisfying fn and its zero-based index.
-func (seq Seq2[K, V]) FindLastFunc2(fn func(K, V) bool) opt.Option[KV[int, KV[K, V]]] {
+// FindLastFunc returns the final key-value pair satisfying fn and its zero-based index.
+func (seq Seq2[K, V]) FindLastFunc(fn func(K, V) bool) opt.Option[KV[int, KV[K, V]]] {
 	return FindLastFunc2(fn, seq)
 }

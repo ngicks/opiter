@@ -45,7 +45,7 @@ func TestSeqContainsFunc(t *testing.T) {
 		t,
 		opiter.WrapSeq(testhelper.SampleSeq()).ContainsFunc(func(v int) bool { return v == 4 }),
 	)
-	assert.Assert(t, opiter.WrapSeq2(testhelper.SampleSeq2()).ContainsFunc2(
+	assert.Assert(t, opiter.WrapSeq2(testhelper.SampleSeq2()).ContainsFunc(
 		func(k string, v int) bool { return k == "baz" && v == 4 },
 	))
 }

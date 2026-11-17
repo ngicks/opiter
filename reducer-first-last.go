@@ -23,8 +23,8 @@ func First2[Seq ~func(yield func(K, V) bool), K, V any](seq Seq) opt.Option[KV[K
 	return opt.None[KV[K, V]]()
 }
 
-// First2 returns the first key-value pair from seq, or none if seq is empty.
-func (seq Seq2[K, V]) First2() opt.Option[KV[K, V]] {
+// First returns the first key-value pair from seq, or none if seq is empty.
+func (seq Seq2[K, V]) First() opt.Option[KV[K, V]] {
 	return First2(seq)
 }
 
@@ -51,7 +51,7 @@ func Last2[Seq ~func(yield func(K, V) bool), K, V any](seq Seq) opt.Option[KV[K,
 	return last
 }
 
-// Last2 returns the last key-value pair from seq, or none if seq is empty.
-func (seq Seq2[K, V]) Last2() opt.Option[KV[K, V]] {
+// Last returns the last key-value pair from seq, or none if seq is empty.
+func (seq Seq2[K, V]) Last() opt.Option[KV[K, V]] {
 	return Last2(seq)
 }

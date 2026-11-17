@@ -67,8 +67,8 @@ func TestSeqFirstLast(t *testing.T) {
 	assert.Equal(t, 6, seq.Last().Value())
 
 	seq2 := opiter.WrapSeq2(testhelper.SampleSeq2())
-	assert.DeepEqual(t, opiter.PackKV("foo", 3), seq2.First2().Value())
-	assert.DeepEqual(t, opiter.PackKV("qux", 5), seq2.Last2().Value())
+	assert.DeepEqual(t, opiter.PackKV("foo", 3), seq2.First().Value())
+	assert.DeepEqual(t, opiter.PackKV("qux", 5), seq2.Last().Value())
 }
 
 func TestFirstShortCircuits(t *testing.T) {

@@ -31,7 +31,7 @@ func Reduce2[Seq ~func(yield func(K, V) bool), K, V, Sum any](
 	return sum
 }
 
-// Reduce2 combines the key-value pairs in seq using fn, starting with initial.
-func (seq Seq2[K, V]) Reduce2[Sum any](fn func(Sum, K, V) Sum, initial Sum) Sum {
+// Reduce combines the key-value pairs in seq using fn, starting with initial.
+func (seq Seq2[K, V]) Reduce[Sum any](fn func(Sum, K, V) Sum, initial Sum) Sum {
 	return Reduce2(fn, initial, seq)
 }

@@ -19,8 +19,8 @@ func ForEach2[Seq ~func(yield func(K, V) bool), K, V any](fn func(K, V), seq Seq
 	}
 }
 
-// ForEach2 calls fn with every key-value pair in seq.
-func (seq Seq2[K, V]) ForEach2(fn func(K, V)) {
+// ForEach calls fn with every key-value pair in seq.
+func (seq Seq2[K, V]) ForEach(fn func(K, V)) {
 	ForEach2(fn, seq)
 }
 
@@ -41,7 +41,7 @@ func Discard2[Seq ~func(yield func(K, V) bool), K, V any](seq Seq) {
 	}
 }
 
-// Discard2 fully consumes seq.
-func (seq Seq2[K, V]) Discard2() {
+// Discard fully consumes seq.
+func (seq Seq2[K, V]) Discard() {
 	Discard2(seq)
 }

@@ -48,7 +48,7 @@ func TestSeqReduce(t *testing.T) {
 	assert.Equal(t, "31415926", got)
 
 	seq2 := opiter.WrapSeq2(testhelper.SampleSeq2())
-	got2 := seq2.Reduce2(func(sum string, k string, v int) string {
+	got2 := seq2.Reduce(func(sum string, k string, v int) string {
 		return sum + k + string(rune('0'+v))
 	}, "")
 	assert.Equal(t, "foo3bar1baz4foo1qux5", got2)
