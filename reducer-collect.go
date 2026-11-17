@@ -6,14 +6,29 @@ import (
 )
 
 // Free function counterparts are not defined here:
-// the standard library has slices.Collect and basic-kv.go has Collect2.
+// calling collector(seq) directly does the same as Collect,
+// the standard library has slices.Collect and basic-kv.go has Collect2 for slices.
 
-// Collect collects values from seq into a new slice and returns it.
-func (seq Seq[V]) Collect() []V {
-	return slices.Collect(iter.Seq[V](seq))
+// Collect passes seq to collector and returns its result.
+//
+// It lets a method chain end with any collecting function, e.g. slices.Collect or slices.Sorted.
+func (seq Seq[V]) Collect[S ~func(yield func(V) bool), U any](collector func(S) U) U {
+	return collector(S(seq))
 }
 
-// Collect2 collects key-value pairs from seq into a new KV slice and returns it.
-func (seq Seq2[K, V]) Collect2() []KV[K, V] {
-	return Collect2(seq)
+// CollectSlice collects values from seq into a new slice and returns it.
+func (seq Seq[V]) CollectSlice() []V {
+	return seq.Collect(slices.Collect)
+}
+
+// Collect passes seq to collector and returns its result.
+//
+// It lets a method chain end with any collecting function, e.g. maps.Collect or [Collect2].
+func (seq Seq2[K, V]) Collect[S ~func(yield func(K, V) bool), U any](collector func(S) U) U {
+	return collector(S(seq))
+}
+
+// CollectSlice collects key-value pairs from seq into a new KV slice and returns it.
+func (seq Seq2[K, V]) CollectSlice() []KV[K, V] {
+	return seq.Collect(Collect2[iter.Seq2[K, V]])
 }
