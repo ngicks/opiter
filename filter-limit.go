@@ -36,11 +36,19 @@ func Limit2[Seq ~func(yield func(K, V) bool), K, V any](n int, seq Seq) iter.Seq
 	}
 }
 
-// LimitUntil yields values from seq until f returns false.
-func LimitUntil[Seq ~func(yield func(V) bool), V any](f func(V) bool, seq Seq) iter.Seq[V] {
+// TakeWhile yields values from seq while f returns true.
+// If inclusive is true, it also yields the first value for which f returns false.
+func TakeWhile[Seq ~func(yield func(V) bool), V any](
+	inclusive bool,
+	f func(V) bool,
+	seq Seq,
+) iter.Seq[V] {
 	return func(yield func(V) bool) {
 		seq(func(v V) bool {
 			if !f(v) {
+				if inclusive {
+					yield(v)
+				}
 				return false
 			}
 			return yield(v)
@@ -48,43 +56,19 @@ func LimitUntil[Seq ~func(yield func(V) bool), V any](f func(V) bool, seq Seq) i
 	}
 }
 
-// LimitUntil2 yields pairs from seq until f returns false.
-func LimitUntil2[Seq ~func(yield func(K, V) bool), K, V any](
+// TakeWhile2 yields pairs from seq while f returns true.
+// If inclusive is true, it also yields the first pair for which f returns false.
+func TakeWhile2[Seq ~func(yield func(K, V) bool), K, V any](
+	inclusive bool,
 	f func(K, V) bool,
 	seq Seq,
 ) iter.Seq2[K, V] {
 	return func(yield func(K, V) bool) {
 		seq(func(k K, v V) bool {
 			if !f(k, v) {
-				return false
-			}
-			return yield(k, v)
-		})
-	}
-}
-
-// LimitAfter is like LimitUntil but includes the first value for which f returns false.
-func LimitAfter[Seq ~func(yield func(V) bool), V any](f func(V) bool, seq Seq) iter.Seq[V] {
-	return func(yield func(V) bool) {
-		seq(func(v V) bool {
-			if !f(v) {
-				yield(v)
-				return false
-			}
-			return yield(v)
-		})
-	}
-}
-
-// LimitAfter2 is like LimitUntil2 but includes the first pair for which f returns false.
-func LimitAfter2[Seq ~func(yield func(K, V) bool), K, V any](
-	f func(K, V) bool,
-	seq Seq,
-) iter.Seq2[K, V] {
-	return func(yield func(K, V) bool) {
-		seq(func(k K, v V) bool {
-			if !f(k, v) {
-				yield(k, v)
+				if inclusive {
+					yield(k, v)
+				}
 				return false
 			}
 			return yield(k, v)
@@ -96,22 +80,14 @@ func (seq Seq[V]) Limit(n int) Seq[V] {
 	return Seq[V](Limit(n, seq))
 }
 
-func (seq Seq[V]) LimitUntil(predicate func(V) bool) Seq[V] {
-	return Seq[V](LimitUntil(predicate, seq))
-}
-
-func (seq Seq[V]) LimitAfter(predicate func(V) bool) Seq[V] {
-	return Seq[V](LimitAfter(predicate, seq))
+func (seq Seq[V]) TakeWhile(inclusive bool, predicate func(V) bool) Seq[V] {
+	return Seq[V](TakeWhile(inclusive, predicate, seq))
 }
 
 func (seq Seq2[K, V]) Limit(n int) Seq2[K, V] {
 	return Seq2[K, V](Limit2(n, seq))
 }
 
-func (seq Seq2[K, V]) LimitUntil(predicate func(K, V) bool) Seq2[K, V] {
-	return Seq2[K, V](LimitUntil2(predicate, seq))
-}
-
-func (seq Seq2[K, V]) LimitAfter(predicate func(K, V) bool) Seq2[K, V] {
-	return Seq2[K, V](LimitAfter2(predicate, seq))
+func (seq Seq2[K, V]) TakeWhile(inclusive bool, predicate func(K, V) bool) Seq2[K, V] {
+	return Seq2[K, V](TakeWhile2(inclusive, predicate, seq))
 }

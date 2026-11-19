@@ -25,20 +25,20 @@ func TestLimitVariants(t *testing.T) {
 		{
 			"until",
 			func(s iter.Seq[int]) iter.Seq[int] {
-				return opiter.LimitUntil(func(v int) bool { return v < 5 }, s)
+				return opiter.TakeWhile(false, func(v int) bool { return v < 5 }, s)
 			},
 			func(s iter.Seq[int]) iter.Seq[int] {
-				return opiter.WrapSeq(s).LimitUntil(func(v int) bool { return v < 5 }).Iter()
+				return opiter.WrapSeq(s).TakeWhile(false, func(v int) bool { return v < 5 }).Iter()
 			},
 			[]int{3, 1, 4, 1},
 		},
 		{
 			"after",
 			func(s iter.Seq[int]) iter.Seq[int] {
-				return opiter.LimitAfter(func(v int) bool { return v < 5 }, s)
+				return opiter.TakeWhile(true, func(v int) bool { return v < 5 }, s)
 			},
 			func(s iter.Seq[int]) iter.Seq[int] {
-				return opiter.WrapSeq(s).LimitAfter(func(v int) bool { return v < 5 }).Iter()
+				return opiter.WrapSeq(s).TakeWhile(true, func(v int) bool { return v < 5 }).Iter()
 			},
 			[]int{3, 1, 4, 1, 5},
 		},
@@ -68,17 +68,17 @@ func TestLimitVariants2(t *testing.T) {
 			testhelper.SamplePairs[:2],
 		},
 		{"until", func(s iter.Seq2[string, int]) iter.Seq2[string, int] {
-			return opiter.LimitUntil2(func(_ string, v int) bool { return v < 4 }, s)
+			return opiter.TakeWhile2(false, func(_ string, v int) bool { return v < 4 }, s)
 		}, func(s iter.Seq2[string, int]) iter.Seq2[string, int] {
 			return opiter.WrapSeq2(s).
-				LimitUntil(func(_ string, v int) bool { return v < 4 }).
+				TakeWhile(false, func(_ string, v int) bool { return v < 4 }).
 				Iter2()
 		}, testhelper.SamplePairs[:2]},
 		{"after", func(s iter.Seq2[string, int]) iter.Seq2[string, int] {
-			return opiter.LimitAfter2(func(_ string, v int) bool { return v < 4 }, s)
+			return opiter.TakeWhile2(true, func(_ string, v int) bool { return v < 4 }, s)
 		}, func(s iter.Seq2[string, int]) iter.Seq2[string, int] {
 			return opiter.WrapSeq2(s).
-				LimitAfter(func(_ string, v int) bool { return v < 4 }).
+				TakeWhile(true, func(_ string, v int) bool { return v < 4 }).
 				Iter2()
 		}, testhelper.SamplePairs[:3]},
 	}
@@ -96,19 +96,19 @@ func TestLimitVariantsStateful(t *testing.T) {
 			return opiter.Limit(len(testhelper.SampleValues), s)
 		},
 		func(s iter.Seq[int]) iter.Seq[int] {
-			return opiter.LimitUntil(func(int) bool { return true }, s)
+			return opiter.TakeWhile(false, func(int) bool { return true }, s)
 		},
 		func(s iter.Seq[int]) iter.Seq[int] {
-			return opiter.LimitAfter(func(int) bool { return true }, s)
+			return opiter.TakeWhile(true, func(int) bool { return true }, s)
 		},
 		func(s iter.Seq[int]) iter.Seq[int] {
 			return opiter.WrapSeq(s).Limit(len(testhelper.SampleValues)).Iter()
 		},
 		func(s iter.Seq[int]) iter.Seq[int] {
-			return opiter.WrapSeq(s).LimitUntil(func(int) bool { return true }).Iter()
+			return opiter.WrapSeq(s).TakeWhile(false, func(int) bool { return true }).Iter()
 		},
 		func(s iter.Seq[int]) iter.Seq[int] {
-			return opiter.WrapSeq(s).LimitAfter(func(int) bool { return true }).Iter()
+			return opiter.WrapSeq(s).TakeWhile(true, func(int) bool { return true }).Iter()
 		},
 	}
 	testhelper.TestFilterStateful(t, testhelper.SampleSeq(), filters, testhelper.SampleValues, nil)
@@ -120,19 +120,23 @@ func TestLimitVariants2Stateful(t *testing.T) {
 			return opiter.Limit2(len(testhelper.SamplePairs), s)
 		},
 		func(s iter.Seq2[string, int]) iter.Seq2[string, int] {
-			return opiter.LimitUntil2(func(string, int) bool { return true }, s)
+			return opiter.TakeWhile2(false, func(string, int) bool { return true }, s)
 		},
 		func(s iter.Seq2[string, int]) iter.Seq2[string, int] {
-			return opiter.LimitAfter2(func(string, int) bool { return true }, s)
+			return opiter.TakeWhile2(true, func(string, int) bool { return true }, s)
 		},
 		func(s iter.Seq2[string, int]) iter.Seq2[string, int] {
 			return opiter.WrapSeq2(s).Limit(len(testhelper.SamplePairs)).Iter2()
 		},
 		func(s iter.Seq2[string, int]) iter.Seq2[string, int] {
-			return opiter.WrapSeq2(s).LimitUntil(func(string, int) bool { return true }).Iter2()
+			return opiter.WrapSeq2(s).
+				TakeWhile(false, func(string, int) bool { return true }).
+				Iter2()
 		},
 		func(s iter.Seq2[string, int]) iter.Seq2[string, int] {
-			return opiter.WrapSeq2(s).LimitAfter(func(string, int) bool { return true }).Iter2()
+			return opiter.WrapSeq2(s).
+				TakeWhile(true, func(string, int) bool { return true }).
+				Iter2()
 		},
 	}
 	testhelper.TestFilterStateful2(t, testhelper.SampleSeq2(), filters, testhelper.SamplePairs, nil)

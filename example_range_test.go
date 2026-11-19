@@ -7,7 +7,8 @@ import (
 )
 
 func ExampleRange_prevent_off_by_one() {
-	for i := range opiter.LimitUntil(
+	for i := range opiter.TakeWhile(
+		false,
 		func(i int) bool { return i < 50 },
 		opiter.Map(
 			func(i int) int { return i * 7 },
