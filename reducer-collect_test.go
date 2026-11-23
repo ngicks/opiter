@@ -73,6 +73,47 @@ func TestSeqCollectSlice(t *testing.T) {
 	)
 }
 
+func TestSeqAppendSeq(t *testing.T) {
+	type ints []int
+	type pairs []opiter.KV[string, int]
+
+	prefix := ints{-2, -1}
+	prefix2 := pairs{opiter.PackKV("z", -1)}
+
+	testhelper.TestReducer(
+		t,
+		testhelper.SampleSeq(),
+		[]func(iter.Seq[int]) ints{
+			func(seq iter.Seq[int]) ints {
+				return opiter.WrapSeq(seq).AppendSeq(slices.Clone(prefix))
+			},
+		},
+		append(slices.Clone(prefix), testhelper.SampleValues...),
+		nil,
+	)
+	testhelper.TestReducer2(
+		t,
+		testhelper.SampleSeq2(),
+		[]func(iter.Seq2[string, int]) pairs{
+			func(seq iter.Seq2[string, int]) pairs {
+				return opiter.WrapSeq2(seq).AppendSeq(slices.Clone(prefix2))
+			},
+		},
+		append(slices.Clone(prefix2), testhelper.SamplePairs...),
+		nil,
+	)
+}
+
+func TestSeqAppendSeqEmpty(t *testing.T) {
+	assert.Assert(t, opiter.WrapSeq(opiter.Empty[int]()).AppendSeq([]int(nil)) == nil)
+	assert.Assert(
+		t,
+		opiter.WrapSeq2(opiter.Empty2[string, int]()).
+			AppendSeq([]opiter.KV[string, int](nil)) ==
+			nil,
+	)
+}
+
 func TestSeqCollectSliceEmpty(t *testing.T) {
 	assert.Assert(t, opiter.WrapSeq(opiter.Empty[int]()).CollectSlice() == nil)
 	assert.Assert(t, opiter.WrapSeq2(opiter.Empty2[string, int]()).CollectSlice() == nil)
