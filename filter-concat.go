@@ -3,7 +3,7 @@ package opiter
 import "iter"
 
 // Concat returns an iterator over the concatenation of seqs.
-func Concat[V any](seqs ...iter.Seq[V]) iter.Seq[V] {
+func Concat[Seq ~func(yield func(V) bool), V any](seqs ...Seq) iter.Seq[V] {
 	return func(yield func(V) bool) {
 		for _, seq := range seqs {
 			stopped := false
@@ -22,7 +22,7 @@ func Concat[V any](seqs ...iter.Seq[V]) iter.Seq[V] {
 }
 
 // Concat2 returns an iterator over the concatenation of seqs.
-func Concat2[K, V any](seqs ...iter.Seq2[K, V]) iter.Seq2[K, V] {
+func Concat2[Seq ~func(yield func(K, V) bool), K, V any](seqs ...Seq) iter.Seq2[K, V] {
 	return func(yield func(K, V) bool) {
 		for _, seq := range seqs {
 			stopped := false
@@ -40,12 +40,22 @@ func Concat2[K, V any](seqs ...iter.Seq2[K, V]) iter.Seq2[K, V] {
 	}
 }
 
-// Concat returns an iterator over f followed by seqs.
-func (seq Seq[V]) Concat(seqs ...iter.Seq[V]) Seq[V] {
-	return Seq[V](Concat(append([]iter.Seq[V]{seq.Iter()}, seqs...)...))
+// Concat returns an iterator over seq followed by seqs.
+func (seq Seq[V]) Concat[Other ~func(yield func(V) bool)](seqs ...Other) Seq[V] {
+	all := make([]Seq[V], 0, len(seqs)+1)
+	all = append(all, seq)
+	for _, other := range seqs {
+		all = append(all, Seq[V](other))
+	}
+	return Seq[V](Concat(all...))
 }
 
 // Concat returns an iterator over seq followed by seqs.
-func (seq Seq2[K, V]) Concat(seqs ...iter.Seq2[K, V]) Seq2[K, V] {
-	return Seq2[K, V](Concat2(append([]iter.Seq2[K, V]{seq.Iter2()}, seqs...)...))
+func (seq Seq2[K, V]) Concat[Other ~func(yield func(K, V) bool)](seqs ...Other) Seq2[K, V] {
+	all := make([]Seq2[K, V], 0, len(seqs)+1)
+	all = append(all, seq)
+	for _, other := range seqs {
+		all = append(all, Seq2[K, V](other))
+	}
+	return Seq2[K, V](Concat2(all...))
 }
