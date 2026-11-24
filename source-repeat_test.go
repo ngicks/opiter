@@ -1,7 +1,6 @@
 package opiter_test
 
 import (
-	"iter"
 	"testing"
 
 	"github.com/ngicks/opiter"
@@ -11,18 +10,18 @@ import (
 func TestRepeat(t *testing.T) {
 	testhelper.TestSourceStateless(
 		t,
-		[]func() iter.Seq[int]{
-			func() iter.Seq[int] { return opiter.Repeat(4, 3) },
-			func() iter.Seq[int] { return opiter.RepeatFunc(func() int { return 4 }, 3) },
+		[]func() opiter.Seq[int]{
+			func() opiter.Seq[int] { return opiter.Repeat(4, 3) },
+			func() opiter.Seq[int] { return opiter.RepeatFunc(func() int { return 4 }, 3) },
 		},
 		[]int{4, 4, 4},
 		nil,
 	)
 	testhelper.TestSourceStateless2(
 		t,
-		[]func() iter.Seq2[string, int]{
-			func() iter.Seq2[string, int] { return opiter.Repeat2("four", 4, 3) },
-			func() iter.Seq2[string, int] {
+		[]func() opiter.Seq2[string, int]{
+			func() opiter.Seq2[string, int] { return opiter.Repeat2("four", 4, 3) },
+			func() opiter.Seq2[string, int] {
 				return opiter.RepeatFunc2(
 					func() string { return "four" },
 					func() int { return 4 },
@@ -39,7 +38,7 @@ func TestRepeat(t *testing.T) {
 	)
 	testhelper.TestSourceStateless(
 		t,
-		[]func() iter.Seq[int]{func() iter.Seq[int] { return opiter.Repeat(4, 0) }},
+		[]func() opiter.Seq[int]{func() opiter.Seq[int] { return opiter.Repeat(4, 0) }},
 		nil,
 		nil,
 	)

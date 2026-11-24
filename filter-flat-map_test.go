@@ -12,9 +12,9 @@ func flatMapFilters(n int) []func(iter.Seq[int]) iter.Seq[int] {
 	// Odd values map to an empty iterator.
 	repeatEven := func(v int) iter.Seq[int] {
 		if v%2 != 0 {
-			return opiter.Empty[int]()
+			return opiter.Empty[int]().Iter()
 		}
-		return opiter.Repeat(v, n)
+		return opiter.Repeat(v, n).Iter()
 	}
 	return []func(iter.Seq[int]) iter.Seq[int]{
 		func(seq iter.Seq[int]) iter.Seq[int] {
@@ -57,9 +57,9 @@ func flatMap2Filters(n int) []func(iter.Seq2[string, int]) iter.Seq2[int, string
 	// Odd values map to an empty iterator.
 	repeatEven := func(k string, v int) iter.Seq2[int, string] {
 		if v%2 != 0 {
-			return opiter.Empty2[int, string]()
+			return opiter.Empty2[int, string]().Iter2()
 		}
-		return opiter.Repeat2(v, k, n)
+		return opiter.Repeat2(v, k, n).Iter2()
 	}
 	return []func(iter.Seq2[string, int]) iter.Seq2[int, string]{
 		func(seq iter.Seq2[string, int]) iter.Seq2[int, string] {
@@ -79,7 +79,7 @@ func flatMap2Filters(n int) []func(iter.Seq2[string, int]) iter.Seq2[int, string
 func flatMap2Input() iter.Seq2[string, int] {
 	return opiter.Values2([]opiter.KV[string, int]{
 		{"foo", 3}, {"bar", 4}, {"baz", 1}, {"qux", 2}, {"quux", 5},
-	})
+	}).Iter2()
 }
 
 func TestFlatMap2(t *testing.T) {

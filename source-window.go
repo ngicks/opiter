@@ -1,9 +1,7 @@
 package opiter
 
-import "iter"
-
 // Window yields overlapping subslices of size n.
-func Window[S ~[]E, E any](s S, n int) iter.Seq[S] {
+func Window[S ~[]E, E any](s S, n int) Seq[S] {
 	return func(yield func(S) bool) {
 		if n <= 0 {
 			return

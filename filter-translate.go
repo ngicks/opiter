@@ -30,12 +30,16 @@ func Pairs[X ~func(yield func(K) bool), Y ~func(yield func(V) bool), K, V any](
 }
 
 // Pairs2 combines x and y, stopping when either sequence stops.
-func Pairs2[K1, V1, K2, V2 any](
-	x iter.Seq2[K1, V1],
-	y iter.Seq2[K2, V2],
+func Pairs2[
+	X ~func(yield func(K1, V1) bool),
+	Y ~func(yield func(K2, V2) bool),
+	K1, V1, K2, V2 any,
+](
+	x X,
+	y Y,
 ) iter.Seq2[KV[K1, V1], KV[K2, V2]] {
 	return func(yield func(KV[K1, V1], KV[K2, V2]) bool) {
-		next, stop := iter.Pull2(y)
+		next, stop := iter.Pull2(iter.Seq2[K2, V2](y))
 		defer stop()
 		x(func(k1 K1, v1 V1) bool {
 			k2, v2, ok := next()
@@ -117,8 +121,8 @@ func (seq Seq[V]) Enumerate() Seq2[int, V] {
 	return Seq2[int, V](Enumerate(seq))
 }
 
-func (seq Seq[V]) Pairs[U any](other iter.Seq[U]) Seq2[V, U] {
-	return Seq2[V, U](Pairs(seq.Iter(), other))
+func (seq Seq[V]) Pairs[Other ~func(yield func(U) bool), U any](other Other) Seq2[V, U] {
+	return Seq2[V, U](Pairs(seq, other))
 }
 
 func (seq Seq[V]) Disassemble[K, U any](fn func(V) (K, U)) Seq2[K, U] {
@@ -129,10 +133,10 @@ func (seq Seq[V]) Omit() func(yield func() bool) {
 	return Omit(seq)
 }
 
-func (seq Seq2[K, V]) Pairs[K2, V2 any](
-	other iter.Seq2[K2, V2],
+func (seq Seq2[K, V]) Pairs[Other ~func(yield func(K2, V2) bool), K2, V2 any](
+	other Other,
 ) iter.Seq2[KV[K, V], KV[K2, V2]] {
-	return Pairs2(seq.Iter2(), other)
+	return Pairs2(seq, other)
 }
 
 func (seq Seq2[K, V]) Transpose() Seq2[V, K] {

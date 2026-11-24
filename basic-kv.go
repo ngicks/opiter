@@ -34,7 +34,7 @@ func (kv KV[K, V]) ToTuple2() tuple.Tuple2[K, V] {
 }
 
 // Values2 returns iterator that yields the KV slice elements in order.
-func Values2[S ~[]KV[K, V], K, V any](s S) iter.Seq2[K, V] {
+func Values2[S ~[]KV[K, V], K, V any](s S) Seq2[K, V] {
 	return func(yield func(K, V) bool) {
 		for _, kv := range s {
 			if !yield(kv.K, kv.V) {
@@ -82,5 +82,5 @@ var _ Iterable2[any, any] = KVPairs[any, any](nil)
 type KVPairs[K, V any] []KV[K, V]
 
 func (v KVPairs[K, V]) Iter2() iter.Seq2[K, V] {
-	return Values2(v)
+	return Values2(v).Iter2()
 }

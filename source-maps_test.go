@@ -2,7 +2,6 @@ package opiter_test
 
 import (
 	"cmp"
-	"iter"
 	"testing"
 
 	goCmp "github.com/google/go-cmp/cmp"
@@ -16,7 +15,7 @@ func TestMapsSorted(t *testing.T) {
 
 	testhelper.TestSourceStateless2(
 		t,
-		[]func() iter.Seq2[string, int]{func() iter.Seq2[string, int] {
+		[]func() opiter.Seq2[string, int]{func() opiter.Seq2[string, int] {
 			return opiter.MapsSorted(m)
 		}},
 		[]opiter.KV[string, int]{
@@ -33,7 +32,7 @@ func TestMapsSortedFunc(t *testing.T) {
 
 	testhelper.TestSourceStateless2(
 		t,
-		[]func() iter.Seq2[string, int]{func() iter.Seq2[string, int] {
+		[]func() opiter.Seq2[string, int]{func() opiter.Seq2[string, int] {
 			return opiter.MapsSortedFunc(m, func(a, b string) int {
 				return cmp.Compare(m[a], m[b])
 			})
@@ -53,7 +52,7 @@ func TestMapsOverlayContract(t *testing.T) {
 	}
 	testhelper.TestSourceStateless2(
 		t,
-		[]func() iter.Seq2[string, int]{func() iter.Seq2[string, int] {
+		[]func() opiter.Seq2[string, int]{func() opiter.Seq2[string, int] {
 			return opiter.MapsOverlay(
 				map[string]int{"foo": 1},
 				map[string]int{"bar": 2},

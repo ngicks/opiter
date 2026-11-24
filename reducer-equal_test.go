@@ -24,7 +24,7 @@ func TestEqual(t *testing.T) {
 		true,
 		nil,
 	)
-	expected2 := opiter.Values2(slices.Clone(testhelper.SamplePairs))
+	expected2 := opiter.Values2(slices.Clone(testhelper.SamplePairs)).Iter2()
 	testhelper.TestReducer2(
 		t,
 		testhelper.SampleSeq2(),
@@ -48,7 +48,7 @@ func TestEqual(t *testing.T) {
 	assert.Assert(t, opiter.Equal(slices.Values([]int{}), slices.Values([]int{})))
 
 	pairs := func(kvs ...opiter.KV[string, int]) iter.Seq2[string, int] {
-		return opiter.Values2(kvs)
+		return opiter.Values2(kvs).Iter2()
 	}
 	assert.Assert(t, !opiter.Equal2(pairs(opiter.PackKV("a", 1)), pairs()))
 	assert.Assert(t, !opiter.Equal2(pairs(opiter.PackKV("a", 1)), pairs(opiter.PackKV("a", 2))))
@@ -68,12 +68,25 @@ func TestSeqEqualFunc(t *testing.T) {
 			slices.Values(otherValues),
 		),
 	)
+	assert.Assert(
+		t,
+		seq.EqualFunc(
+			func(a int, b int64) bool { return int64(a) == b },
+			opiter.SlicesValues(otherValues),
+		),
+	)
 
 	seq2 := opiter.WrapSeq2(testhelper.SampleSeq2())
 	otherPairs := make([]opiter.KV[string, int64], len(testhelper.SamplePairs))
 	for i, kv := range testhelper.SamplePairs {
 		otherPairs[i] = opiter.PackKV(kv.K, int64(kv.V))
 	}
+	assert.Assert(t, seq2.EqualFunc(
+		func(k1 string, v1 int, k2 string, v2 int64) bool {
+			return k1 == k2 && int64(v1) == v2
+		},
+		opiter.Values2(otherPairs).Iter2(),
+	))
 	assert.Assert(t, seq2.EqualFunc(
 		func(k1 string, v1 int, k2 string, v2 int64) bool {
 			return k1 == k2 && int64(v1) == v2

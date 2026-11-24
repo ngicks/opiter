@@ -2,8 +2,6 @@ package opiter_test
 
 import (
 	"context"
-	"iter"
-	"slices"
 	"testing"
 	"testing/synctest"
 
@@ -15,7 +13,7 @@ import (
 func TestChan(t *testing.T) {
 	testhelper.TestSourceStateful(
 		t,
-		[]func() iter.Seq[int]{func() iter.Seq[int] {
+		[]func() opiter.Seq[int]{func() opiter.Seq[int] {
 			ch := make(chan int, 4)
 			for _, v := range []int{1, 2, 3, 4} {
 				ch <- v
@@ -33,7 +31,7 @@ func TestChanCanceled(t *testing.T) {
 	cancel()
 	ch := make(chan int, 1)
 	ch <- 1
-	if got := slices.Collect(opiter.Chan(ctx, ch)); len(got) != 0 {
+	if got := opiter.Chan(ctx, ch).CollectSlice(); len(got) != 0 {
 		t.Errorf("canceled iterator yielded %v", got)
 	}
 }
@@ -45,7 +43,7 @@ func TestChanCanceledWhileWaiting(t *testing.T) {
 		ctx, cancel := context.WithCancel(t.Context())
 		ch := make(chan int)
 		done := make(chan []int)
-		go func() { done <- slices.Collect(opiter.Chan(ctx, ch)) }()
+		go func() { done <- opiter.Chan(ctx, ch).CollectSlice() }()
 		synctest.Wait()
 		cancel()
 		assert.Equal(t, 0, len(<-done))

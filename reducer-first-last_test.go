@@ -57,8 +57,8 @@ func TestFirstLast(t *testing.T) {
 	)
 	assert.Assert(t, opiter.First(slices.Values([]int{})).IsNone())
 	assert.Assert(t, opiter.Last(slices.Values([]int{})).IsNone())
-	assert.Assert(t, opiter.First2(opiter.Values2([]opiter.KV[string, int]{})).IsNone())
-	assert.Assert(t, opiter.Last2(opiter.Values2([]opiter.KV[string, int]{})).IsNone())
+	assert.Assert(t, opiter.First2(opiter.Values2([]opiter.KV[string, int]{}).Iter2()).IsNone())
+	assert.Assert(t, opiter.Last2(opiter.Values2([]opiter.KV[string, int]{}).Iter2()).IsNone())
 }
 
 func TestSeqFirstLast(t *testing.T) {

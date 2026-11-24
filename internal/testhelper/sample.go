@@ -27,7 +27,7 @@ func SampleSeq() iter.Seq[int] {
 
 // SampleSeq2 returns a stateless iterator over SamplePairs.
 func SampleSeq2() iter.Seq2[string, int] {
-	return opiter.Values2(SamplePairs)
+	return opiter.Values2(SamplePairs).Iter2()
 }
 
 // OneShotSeq returns a single-use iterator over values,

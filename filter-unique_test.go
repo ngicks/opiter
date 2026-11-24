@@ -24,7 +24,7 @@ func TestUniqueVariants(t *testing.T) {
 }
 
 func TestUniqueVariants2(t *testing.T) {
-	input := opiter.Values2([]opiter.KV[int, int]{{1, 1}, {1, 1}, {2, 2}})
+	input := opiter.Values2([]opiter.KV[int, int]{{1, 1}, {1, 1}, {2, 2}}).Iter2()
 	filters := []func(iter.Seq2[int, int]) iter.Seq2[int, int]{
 		func(s iter.Seq2[int, int]) iter.Seq2[int, int] { return opiter.Unique2(s) },
 		func(s iter.Seq2[int, int]) iter.Seq2[int, int] {

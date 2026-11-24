@@ -10,4 +10,7 @@
 // value and a presence boolean. Package functions accept standard [iter.Seq]
 // and [iter.Seq2] values; [Seq] and [Seq2] provide fluent counterparts for
 // filters and reducers where Go's method type-parameter rules allow them.
+// Sources return [Seq] and [Seq2], so a method chain can start from a source.
+// Call [Seq.Iter] or [Seq2.Iter2] to pass a source to code that requires the
+// standard types.
 package opiter

@@ -1,7 +1,6 @@
 package opiter_test
 
 import (
-	"iter"
 	"slices"
 	"testing"
 
@@ -20,16 +19,16 @@ func TestStepBy(t *testing.T) {
 	values := []string{"a", "b", "c", "d"}
 	testhelper.TestSourceStateless2(
 		t,
-		[]func() iter.Seq2[int, string]{
-			func() iter.Seq2[int, string] { return opiter.StepBy(1, 2, values) },
+		[]func() opiter.Seq2[int, string]{
+			func() opiter.Seq2[int, string] { return opiter.StepBy(1, 2, values) },
 		},
 		[]opiter.KV[int, string]{{K: 1, V: "b"}, {K: 3, V: "d"}},
 		nil,
 	)
 	testhelper.TestSourceStateless2(
 		t,
-		[]func() iter.Seq2[int, string]{
-			func() iter.Seq2[int, string] { return opiter.StepBy(-1, 2, values) },
+		[]func() opiter.Seq2[int, string]{
+			func() opiter.Seq2[int, string] { return opiter.StepBy(-1, 2, values) },
 		},
 		nil,
 		nil,

@@ -19,7 +19,7 @@ func TestTryReducers(t *testing.T) {
 		{K: 1},
 		{K: 4, V: errStop},
 		{K: 9},
-	})
+	}).Iter2()
 	type findResult struct {
 		Value opt.Option[opiter.KV[int, int]]
 		Err   error
@@ -76,7 +76,7 @@ func TestTryReducers(t *testing.T) {
 }
 
 func TestTryReducersNoError(t *testing.T) {
-	input := opiter.Values2([]opiter.KV[int, error]{{K: 3}, {K: 1}, {K: 4}})
+	input := opiter.Values2([]opiter.KV[int, error]{{K: 3}, {K: 1}, {K: 4}}).Iter2()
 	type findResult struct {
 		Value opt.Option[opiter.KV[int, int]]
 		Err   error
@@ -135,7 +135,7 @@ func TestTryMapReducers(t *testing.T) {
 		{K: opiter.PackKV("b", 2)},
 		{K: opiter.PackKV("c", 3), V: errStop},
 		{K: opiter.PackKV("d", 4)},
-	})
+	}).Iter2()
 	type result struct {
 		Map map[string]int
 		Err error
@@ -162,7 +162,7 @@ func TestTryMapReducers(t *testing.T) {
 	m, err := opiter.TryMapsCollect(opiter.Values2([]opiter.KV[opiter.KV[string, int], error]{
 		{K: opiter.PackKV("a", 1)},
 		{K: opiter.PackKV("b", 2)},
-	}))
+	}).Iter2())
 	assert.NilError(t, err)
 	assert.DeepEqual(t, map[string]int{"a": 1, "b": 2}, m)
 }

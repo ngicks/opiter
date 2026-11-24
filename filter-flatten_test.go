@@ -34,8 +34,8 @@ func TestFlattenVariants(t *testing.T) {
 
 	inner2 := slices.Values(
 		[]iter.Seq2[int, int]{
-			opiter.Values2([]opiter.KV[int, int]{{1, 2}}),
-			opiter.Values2([]opiter.KV[int, int]{{3, 4}}),
+			opiter.Values2([]opiter.KV[int, int]{{1, 2}}).Iter2(),
+			opiter.Values2([]opiter.KV[int, int]{{3, 4}}).Iter2(),
 		},
 	)
 	testhelper.TestFilterStateless1To2(
@@ -52,7 +52,7 @@ func TestFlattenVariants(t *testing.T) {
 }
 
 func TestFlattenPairVariants(t *testing.T) {
-	first := opiter.Values2([]opiter.KV[[]int, string]{{[]int{1, 2}, "x"}})
+	first := opiter.Values2([]opiter.KV[[]int, string]{{[]int{1, 2}, "x"}}).Iter2()
 	testhelper.TestFilterStateless2(
 		t,
 		first,
@@ -64,7 +64,7 @@ func TestFlattenPairVariants(t *testing.T) {
 	)
 	firstSeq := opiter.Values2(
 		[]opiter.KV[iter.Seq[int], string]{{slices.Values([]int{1, 2}), "x"}},
-	)
+	).Iter2()
 	testhelper.TestFilterStateless2(
 		t,
 		firstSeq,
@@ -76,7 +76,7 @@ func TestFlattenPairVariants(t *testing.T) {
 		[]opiter.KV[int, string]{{1, "x"}, {2, "x"}},
 		nil,
 	)
-	last := opiter.Values2([]opiter.KV[string, []int]{{"x", []int{1, 2}}})
+	last := opiter.Values2([]opiter.KV[string, []int]{{"x", []int{1, 2}}}).Iter2()
 	testhelper.TestFilterStateless2(
 		t,
 		last,
@@ -86,7 +86,8 @@ func TestFlattenPairVariants(t *testing.T) {
 		[]opiter.KV[string, int]{{"x", 1}, {"x", 2}},
 		nil,
 	)
-	lastSeq := opiter.Values2([]opiter.KV[string, iter.Seq[int]]{{"x", slices.Values([]int{1, 2})}})
+	lastSeq := opiter.Values2([]opiter.KV[string, iter.Seq[int]]{{"x", slices.Values([]int{1, 2})}}).
+		Iter2()
 	testhelper.TestFilterStateless2(
 		t,
 		lastSeq,
@@ -120,8 +121,8 @@ func TestFlattenVariantsStateful(t *testing.T) {
 		[]int{1, 2, 3}, nil)
 
 	inner2 := slices.Values([]iter.Seq2[int, int]{
-		opiter.Values2([]opiter.KV[int, int]{{1, 2}}),
-		opiter.Values2([]opiter.KV[int, int]{{3, 4}}),
+		opiter.Values2([]opiter.KV[int, int]{{1, 2}}).Iter2(),
+		opiter.Values2([]opiter.KV[int, int]{{3, 4}}).Iter2(),
 	})
 	testhelper.TestFilterStateful1To2(t, inner2,
 		[]func(iter.Seq[iter.Seq2[int, int]]) iter.Seq2[int, int]{
@@ -133,7 +134,7 @@ func TestFlattenVariantsStateful(t *testing.T) {
 }
 
 func TestFlattenPairVariantsStateful(t *testing.T) {
-	first := opiter.Values2([]opiter.KV[[]int, string]{{[]int{1}, "x"}, {[]int{2}, "y"}})
+	first := opiter.Values2([]opiter.KV[[]int, string]{{[]int{1}, "x"}, {[]int{2}, "y"}}).Iter2()
 	testhelper.TestFilterStateful2(t, first,
 		[]func(iter.Seq2[[]int, string]) iter.Seq2[int, string]{
 			func(s iter.Seq2[[]int, string]) iter.Seq2[int, string] { return opiter.FlattenF(s) },
@@ -143,7 +144,7 @@ func TestFlattenPairVariantsStateful(t *testing.T) {
 	firstSeq := opiter.Values2([]opiter.KV[iter.Seq[int], string]{
 		{slices.Values([]int{1}), "x"},
 		{slices.Values([]int{2}), "y"},
-	})
+	}).Iter2()
 	testhelper.TestFilterStateful2(t, firstSeq,
 		[]func(iter.Seq2[iter.Seq[int], string]) iter.Seq2[int, string]{
 			func(s iter.Seq2[iter.Seq[int], string]) iter.Seq2[int, string] {
@@ -152,7 +153,7 @@ func TestFlattenPairVariantsStateful(t *testing.T) {
 		},
 		[]opiter.KV[int, string]{{1, "x"}, {2, "y"}}, nil)
 
-	last := opiter.Values2([]opiter.KV[string, []int]{{"x", []int{1}}, {"y", []int{2}}})
+	last := opiter.Values2([]opiter.KV[string, []int]{{"x", []int{1}}, {"y", []int{2}}}).Iter2()
 	testhelper.TestFilterStateful2(t, last,
 		[]func(iter.Seq2[string, []int]) iter.Seq2[string, int]{
 			func(s iter.Seq2[string, []int]) iter.Seq2[string, int] { return opiter.FlattenL(s) },
@@ -162,7 +163,7 @@ func TestFlattenPairVariantsStateful(t *testing.T) {
 	lastSeq := opiter.Values2([]opiter.KV[string, iter.Seq[int]]{
 		{"x", slices.Values([]int{1})},
 		{"y", slices.Values([]int{2})},
-	})
+	}).Iter2()
 	testhelper.TestFilterStateful2(t, lastSeq,
 		[]func(iter.Seq2[string, iter.Seq[int]]) iter.Seq2[string, int]{
 			func(s iter.Seq2[string, iter.Seq[int]]) iter.Seq2[string, int] {

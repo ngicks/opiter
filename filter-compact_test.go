@@ -24,7 +24,7 @@ func TestCompactVariants(t *testing.T) {
 }
 
 func TestCompactVariants2(t *testing.T) {
-	input := opiter.Values2([]opiter.KV[int, int]{{1, 1}, {1, 1}, {2, 2}})
+	input := opiter.Values2([]opiter.KV[int, int]{{1, 1}, {1, 1}, {2, 2}}).Iter2()
 	eq := func(k1, v1, k2, v2 int) bool { return k1 == k2 && v1 == v2 }
 	filters := []func(iter.Seq2[int, int]) iter.Seq2[int, int]{
 		func(s iter.Seq2[int, int]) iter.Seq2[int, int] { return opiter.Compact2(s) },

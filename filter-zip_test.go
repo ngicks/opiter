@@ -124,18 +124,18 @@ func TestZip2(t *testing.T) {
 		func(s iter.Seq2[int, string]) iter.Seq[zipped] {
 			return opiter.Zip2(
 				s,
-				namedSeq2[string, int](opiter.Values2([]opiter.KV[string, int]{{"x", 3}})),
+				namedSeq2[string, int](opiter.Values2([]opiter.KV[string, int]{{"x", 3}}).Iter2()),
 			)
 		},
 		func(s iter.Seq2[int, string]) iter.Seq[zipped] {
 			return opiter.WrapSeq2(s).Zip(
-				namedSeq2[string, int](opiter.Values2([]opiter.KV[string, int]{{"x", 3}})),
+				namedSeq2[string, int](opiter.Values2([]opiter.KV[string, int]{{"x", 3}}).Iter2()),
 			).Iter()
 		},
 	}
 	testhelper.TestFilterStateless2To1(
 		t,
-		opiter.Values2([]opiter.KV[int, string]{{1, "a"}, {2, "b"}}),
+		opiter.Values2([]opiter.KV[int, string]{{1, "a"}, {2, "b"}}).Iter2(),
 		leftOnlyFilters,
 		leftOnlyExpected,
 		cmpOpt,
@@ -160,24 +160,24 @@ func TestZip2(t *testing.T) {
 		func(s iter.Seq2[int, string]) iter.Seq[zipped] {
 			return opiter.Zip2(s, namedSeq2[string, int](opiter.Values2(
 				[]opiter.KV[string, int]{{"x", 3}, {"y", 4}},
-			)))
+			).Iter2()))
 		},
 		func(s iter.Seq2[int, string]) iter.Seq[zipped] {
 			return opiter.WrapSeq2(s).Zip(namedSeq2[string, int](opiter.Values2(
 				[]opiter.KV[string, int]{{"x", 3}, {"y", 4}},
-			))).Iter()
+			).Iter2())).Iter()
 		},
 	}
 	testhelper.TestFilterStateless2To1(
 		t,
-		opiter.Values2([]opiter.KV[int, string]{{1, "a"}}),
+		opiter.Values2([]opiter.KV[int, string]{{1, "a"}}).Iter2(),
 		rightOnlyFilters,
 		rightOnlyExpected,
 		cmpOpt,
 	)
 
-	namedLeft := namedSeq2[int, string](opiter.Values2([]opiter.KV[int, string]{{1, "a"}}))
-	namedRight := namedSeq2[int, string](opiter.Values2([]opiter.KV[int, string]{{2, "b"}}))
+	namedLeft := namedSeq2[int, string](opiter.Values2([]opiter.KV[int, string]{{1, "a"}}).Iter2())
+	namedRight := namedSeq2[int, string](opiter.Values2([]opiter.KV[int, string]{{2, "b"}}).Iter2())
 	namedExpected := []tuple.Tuple2[
 		opt.Option[opiter.KV[int, string]],
 		opt.Option[opiter.KV[int, string]],
@@ -236,18 +236,18 @@ func TestZipMethodsReturnSeq(t *testing.T) {
 		opt.Option[opiter.KV[string, int]],
 	]
 	seq2 := opiter.WrapSeq2(
-		opiter.Values2([]opiter.KV[int, string]{{1, "a"}}),
+		opiter.Values2([]opiter.KV[int, string]{{1, "a"}}).Iter2(),
 	).Zip(namedSeq2[string, int](
-		opiter.Values2([]opiter.KV[string, int]{{"x", 2}}),
+		opiter.Values2([]opiter.KV[string, int]{{"x", 2}}).Iter2(),
 	))
 	requireType[opiter.Seq[zipped2]](seq2)
 	if got := slices.Collect(seq2.Limit(1).Iter()); len(got) != 1 {
 		t.Fatalf("Seq2.Zip(...).Limit(1) yielded %d values", len(got))
 	}
 	if got := slices.Collect(opiter.WrapSeq2(
-		opiter.Values2([]opiter.KV[int, string]{{1, "a"}}),
+		opiter.Values2([]opiter.KV[int, string]{{1, "a"}}).Iter2(),
 	).Zip(namedSeq2[string, int](
-		opiter.Values2([]opiter.KV[string, int]{{"x", 2}}),
+		opiter.Values2([]opiter.KV[string, int]{{"x", 2}}).Iter2(),
 	)).Limit(1).Iter()); len(got) != 1 {
 		t.Fatalf("direct Seq2.Zip(...).Limit(1) yielded %d values", len(got))
 	}

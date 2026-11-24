@@ -25,6 +25,9 @@ func TestTranslateSeqShapes(t *testing.T) {
 			func(s iter.Seq[int]) iter.Seq2[int, int] {
 				return opiter.WrapSeq(s).Pairs(slices.Values([]int{3, 4})).Iter2()
 			},
+			func(s iter.Seq[int]) iter.Seq2[int, int] {
+				return opiter.WrapSeq(s).Pairs(opiter.SlicesValues([]int{3, 4})).Iter2()
+			},
 		},
 		[]opiter.KV[int, int]{{1, 3}, {2, 4}}, nil)
 	testhelper.TestFilterStateless1To2(t, slices.Values([]int{12, 34}),
@@ -42,7 +45,7 @@ func TestTranslateSeqShapes(t *testing.T) {
 }
 
 func TestTranslatePairShapes(t *testing.T) {
-	input := opiter.Values2([]opiter.KV[int, string]{{1, "a"}, {2, "b"}})
+	input := opiter.Values2([]opiter.KV[int, string]{{1, "a"}, {2, "b"}}).Iter2()
 	testhelper.TestFilterStateless2(t, input,
 		[]func(iter.Seq2[int, string]) iter.Seq2[string, int]{
 			func(s iter.Seq2[int, string]) iter.Seq2[string, int] { return opiter.Transpose(s) },
@@ -74,7 +77,7 @@ func TestTranslatePairShapes(t *testing.T) {
 
 func TestPairs2AndOmit(t *testing.T) {
 	got := opiter.Collect2(opiter.Pairs2(
-		opiter.Values2([]opiter.KV[int, int]{{1, 2}}),
+		opiter.Values2([]opiter.KV[int, int]{{1, 2}}).Iter2(),
 		opiter.Values2([]opiter.KV[int, int]{{3, 4}}),
 	))
 	if !slices.Equal(
@@ -86,7 +89,7 @@ func TestPairs2AndOmit(t *testing.T) {
 		t.Fatalf("Pairs2() = %v", got)
 	}
 	methodGot := opiter.Collect2(opiter.WrapSeq2(
-		opiter.Values2([]opiter.KV[int, int]{{1, 2}}),
+		opiter.Values2([]opiter.KV[int, int]{{1, 2}}).Iter2(),
 	).Pairs(opiter.Values2([]opiter.KV[int, int]{{3, 4}})))
 	if !slices.Equal(methodGot, got) {
 		t.Fatalf("Pairs method = %v", methodGot)
@@ -95,7 +98,7 @@ func TestPairs2AndOmit(t *testing.T) {
 	for range opiter.WrapSeq(slices.Values([]int{1, 2})).Omit() {
 		count++
 	}
-	for range opiter.WrapSeq2(opiter.Values2([]opiter.KV[int, int]{{1, 2}})).Omit() {
+	for range opiter.WrapSeq2(opiter.Values2([]opiter.KV[int, int]{{1, 2}}).Iter2()).Omit() {
 		count++
 	}
 	if count != 3 {

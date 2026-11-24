@@ -40,7 +40,10 @@ func EqualFunc[
 }
 
 // EqualFunc reports whether seq and other yield values equal according to fn in the same order.
-func (seq Seq[V]) EqualFunc[U any](fn func(V, U) bool, other iter.Seq[U]) bool {
+func (seq Seq[V]) EqualFunc[Other ~func(yield func(U) bool), U any](
+	fn func(V, U) bool,
+	other Other,
+) bool {
 	return EqualFunc(fn, seq, other)
 }
 
@@ -67,9 +70,9 @@ func EqualFunc2[
 }
 
 // EqualFunc reports whether seq and other yield pairs equal according to fn in the same order.
-func (seq Seq2[K, V]) EqualFunc[K2, V2 any](
+func (seq Seq2[K, V]) EqualFunc[Other ~func(yield func(K2, V2) bool), K2, V2 any](
 	fn func(K, V, K2, V2) bool,
-	other iter.Seq2[K2, V2],
+	other Other,
 ) bool {
 	return EqualFunc2(fn, seq, other)
 }

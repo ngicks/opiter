@@ -25,7 +25,7 @@ func TestCycleVariants(t *testing.T) {
 }
 
 func TestCycleVariants2(t *testing.T) {
-	input := opiter.Values2([]opiter.KV[int, int]{{1, 2}, {3, 4}})
+	input := opiter.Values2([]opiter.KV[int, int]{{1, 2}, {3, 4}}).Iter2()
 	expected := []opiter.KV[int, int]{{1, 2}, {3, 4}, {1, 2}}
 	seqs := []opiter.Seq2[int, int]{
 		opiter.WrapSeq2(opiter.Limit2(3, opiter.Cycle2(input))),
@@ -70,7 +70,7 @@ func TestCycleBuffered2Break(t *testing.T) {
 	testhelper.TestFilterStateless2(t, testhelper.SampleSeq2(), filters, expected, nil)
 	testhelper.TestFilterStateless2(
 		t,
-		opiter.Values2[[]opiter.KV[string, int]](nil),
+		opiter.Values2[[]opiter.KV[string, int]](nil).Iter2(),
 		filters,
 		nil,
 		nil,

@@ -29,8 +29,8 @@ func TestConcat(t *testing.T) {
 }
 
 func TestConcat2(t *testing.T) {
-	input := opiter.Values2([]opiter.KV[int, int]{{1, 2}})
-	other := opiter.Values2([]opiter.KV[int, int]{{3, 4}})
+	input := opiter.Values2([]opiter.KV[int, int]{{1, 2}}).Iter2()
+	other := opiter.Values2([]opiter.KV[int, int]{{3, 4}}).Iter2()
 	filters := []func(iter.Seq2[int, int]) iter.Seq2[int, int]{
 		func(seq iter.Seq2[int, int]) iter.Seq2[int, int] {
 			return opiter.Concat2(seq, other)
