@@ -2,9 +2,9 @@ package opiter
 
 import "iter"
 
-// MapsKeys returns an iterator over the values in m for each key yielded by
+// MapsBy returns an iterator over the values in m for each key yielded by
 // keys. The keys iterator determines the order.
-func MapsKeys[M ~map[K]V, Seq ~func(yield func(K) bool), K comparable, V any](
+func MapsBy[M ~map[K]V, Seq ~func(yield func(K) bool), K comparable, V any](
 	m M,
 	keys Seq,
 ) iter.Seq2[K, V] {

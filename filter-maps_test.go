@@ -9,12 +9,12 @@ import (
 	"github.com/ngicks/opiter/internal/testhelper"
 )
 
-func TestMapsKeys(t *testing.T) {
+func TestMapsBy(t *testing.T) {
 	m := map[string]int{"foo": 1, "bar": 2, "baz": 3}
 	input := slices.Values([]string{"baz", "missing", "foo"})
 	filters := []func(iter.Seq[string]) iter.Seq2[string, int]{
 		func(keys iter.Seq[string]) iter.Seq2[string, int] {
-			return opiter.MapsKeys(m, keys)
+			return opiter.MapsBy(m, keys)
 		},
 	}
 	expected := []opiter.KV[string, int]{
