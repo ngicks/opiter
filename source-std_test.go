@@ -120,3 +120,107 @@ func TestMapsValues(t *testing.T) {
 	m := map[string]int{"a": 1, "b": 2, "c": 3}
 	assert.DeepEqual(t, []int{1, 2, 3}, opiter.MapsValues(m).Collect(slices.Sorted))
 }
+
+func isComma(r rune) bool { return r == ',' }
+
+func toBytes(ss ...string) [][]byte {
+	out := make([][]byte, len(ss))
+	for i, s := range ss {
+		out[i] = []byte(s)
+	}
+	return out
+}
+
+func TestStringsSingleUse(t *testing.T) {
+	for _, tc := range []struct {
+		name     string
+		source   func() opiter.Seq[string]
+		expected []string
+	}{
+		{
+			"Lines",
+			func() opiter.Seq[string] { return opiter.StringsLines("a\nb\nc") },
+			[]string{"a\n", "b\n", "c"},
+		},
+		{
+			"SplitSeq",
+			func() opiter.Seq[string] { return opiter.StringsSplitSeq("a,b,c", ",") },
+			[]string{"a", "b", "c"},
+		},
+		{
+			"SplitAfterSeq",
+			func() opiter.Seq[string] { return opiter.StringsSplitAfterSeq("a,b,c", ",") },
+			[]string{"a,", "b,", "c"},
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			testhelper.TestSourceSingleUse(
+				t,
+				[]func() opiter.Seq[string]{tc.source},
+				tc.expected,
+				nil,
+			)
+		})
+	}
+}
+
+func TestStringsFields(t *testing.T) {
+	testhelper.TestSourceStateless(
+		t,
+		[]func() opiter.Seq[string]{
+			func() opiter.Seq[string] { return opiter.StringsFieldsSeq(" a  b c ") },
+			func() opiter.Seq[string] { return opiter.StringsFieldsFuncSeq(",a,,b,c", isComma) },
+		},
+		[]string{"a", "b", "c"},
+		nil,
+	)
+}
+
+func TestBytesSingleUse(t *testing.T) {
+	for _, tc := range []struct {
+		name     string
+		source   func() opiter.Seq[[]byte]
+		expected [][]byte
+	}{
+		{
+			"Lines",
+			func() opiter.Seq[[]byte] { return opiter.BytesLines([]byte("a\nb\nc")) },
+			toBytes("a\n", "b\n", "c"),
+		},
+		{
+			"SplitSeq",
+			func() opiter.Seq[[]byte] { return opiter.BytesSplitSeq([]byte("a,b,c"), []byte(",")) },
+			toBytes("a", "b", "c"),
+		},
+		{
+			"SplitAfterSeq",
+			func() opiter.Seq[[]byte] {
+				return opiter.BytesSplitAfterSeq([]byte("a,b,c"), []byte(","))
+			},
+			toBytes("a,", "b,", "c"),
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			testhelper.TestSourceSingleUse(
+				t,
+				[]func() opiter.Seq[[]byte]{tc.source},
+				tc.expected,
+				nil,
+			)
+		})
+	}
+}
+
+func TestBytesFields(t *testing.T) {
+	testhelper.TestSourceStateless(
+		t,
+		[]func() opiter.Seq[[]byte]{
+			func() opiter.Seq[[]byte] { return opiter.BytesFieldsSeq([]byte(" a  b c ")) },
+			func() opiter.Seq[[]byte] {
+				return opiter.BytesFieldsFuncSeq([]byte(",a,,b,c"), isComma)
+			},
+		},
+		toBytes("a", "b", "c"),
+		nil,
+	)
+}
