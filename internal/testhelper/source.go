@@ -228,6 +228,33 @@ func TestSourceStateful[V any, Iter ~func(yield func(V) bool)](
 	testSourceStateful(t, sources, expected, cmpOpt)
 }
 
+// TestSourceSingleUse asserts every factory in sources produces a single-use,
+// well-behaved iterator yielding exactly expected. See the package doc for the
+// contracts. Each factory call must return a fresh, independent iterator.
+func TestSourceSingleUse[V any, Iter ~func(yield func(V) bool)](
+	t *testing.T,
+	sources []func() Iter,
+	expected []V,
+	cmpOpt []goCmp.Option,
+) {
+	t.Helper()
+	for i, mk := range sources {
+		t.Run(fmt.Sprintf("sources[%d]", i), func(t *testing.T) {
+			got := slices.Collect(iter.Seq[V](mk()))
+			assertValues(t, expected, got, cmpOpt, "full pass")
+
+			for cut := range len(expected) {
+				part, rej, rejected := takeN(iter.Seq[V](mk()), cut)
+				if !rejected {
+					t.Errorf("break at %d: iterator ended before yielding element %d", cut, cut)
+					continue
+				}
+				assertValues(t, expected[:cut+1], append(part, rej), cmpOpt, "break at %d", cut)
+			}
+		})
+	}
+}
+
 // TestSourceStateless2 is [TestSourceStateless] for iter.Seq2-shaped iterators.
 func TestSourceStateless2[K, V any, Iter ~func(yield func(K, V) bool)](
 	t *testing.T,

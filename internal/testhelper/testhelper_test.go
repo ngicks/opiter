@@ -36,6 +36,16 @@ func TestSourceHelpers(t *testing.T) {
 		nil,
 	)
 
+	TestSourceSingleUse(
+		t,
+		[]func() iter.Seq[int]{
+			SampleSeq,
+			func() iter.Seq[int] { return OneShotSeq(SampleValues...) },
+		},
+		SampleValues,
+		nil,
+	)
+
 	TestSourceStateless2(t, []func() iter.Seq2[string, int]{SampleSeq2}, SamplePairs, nil)
 	TestSourceStateful2(
 		t,

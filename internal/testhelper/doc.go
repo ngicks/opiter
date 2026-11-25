@@ -10,4 +10,7 @@
 //     delivered to the yield call that rejected it (returned false) counts as
 //     consumed: re-invoking the iterator resumes right after it, and a fully
 //     consumed iterator yields nothing.
+//   - single-use: only the first invocation is specified. The helpers never
+//     re-invoke the same iterator value, because standard library iterators
+//     documented as single-use disagree on what a second invocation yields.
 package testhelper
